@@ -1,14 +1,11 @@
 <?php include('scripts/header.php');?>   
       <div id="blog" role="complimentary">
     
- 	    <div class='featured'>
- 	    <p>The biggest Programs and Schemes will have the biggest increases in raw dollars. This query takes this into account and lists Schemes increases by the size relative to the prior year's funding.</p>
-  </div>
-  
+ 	    
   
 <div class='featured'>
 
-    <h3>Search All Fields &nbsp;&nbsp;&nbsp;<a href="budget_home.php">Clear</a></h3>
+    <h3>Search All Fields &nbsp;&nbsp;&nbsp;<a href="index.php">Clear</a></h3>
 <h5>This form gives Budget results from all fields eg health, education.</h5>
     
     
