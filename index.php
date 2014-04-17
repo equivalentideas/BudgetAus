@@ -53,7 +53,7 @@ document.form.value(bar);
 
 	
 <div id='header2'>
-   <a href="budget_home.php"  title="BudgetAus Home page"><img src='http://infoaus.net/budgetaus_logo.jpg'></img></a></div>		
+   <a href="index.php"  title="BudgetAus Home page"><img src='http://infoaus.net/budgetaus_logo.jpg'></img></a></div>		
     
 <div>
 <!--uppper_nav-->
@@ -64,7 +64,7 @@ document.form.value(bar);
 
   <hr>
    <div class='contact_nav'>
-     <div class="links"><a href="about.php">About</a></div>
+     <div class="links"><a href="./about.php">About</a></div>
 <div class="links"><a href="http://us7.campaign-archive2.com/home/?u=109c99ba0377cbca81d6260d8&id=b2d009cdd9">NewsLetter</a></div>
 <div class="links"><a href="http://facebook.com/BudgetAus">Facebook</a></div>
 <div class="links"><a href="http://twitter.com/Info_Aus">Twitter</a></div>
@@ -108,7 +108,7 @@ document.form.value(bar);
  	  
  	    
  	    </table>
- 	    <div class="content">
+ 	<!--    <div class="content">
 
 <h3>Power Search</h3>
 <h5>Find and total results across entire budget based on your search term (Boolean). </h5>
@@ -352,7 +352,7 @@ include('scripts/db.php');
  <div class="content"> 
 <h3><a name='objective'>Objectives</a></h3>
 <h5>This form lists all the Programs administered which contain text within the Program Objectives field that match your search term and opens in a new window.</h5>
-  <form action="budget_home.php#objective" method="GET">
+  <form action="index.php#objective" method="GET">
 <div role="form">
    <lable for="objectives"><input type="text"  id="objectives" name="objectives" value="alcohol" /></lable>
   
@@ -413,7 +413,7 @@ echo
     
     
 
-  <form action='budget_home.php#non_boolean' target='_blank' method="GET">
+  <form action='index.php#non_boolean' target='_blank' method="GET">
 <div id='form' role='form'>
    <lable for="search_term"><input type="text"  id="search_term_non" name="search_term_non" value="school" /></lable>
   
@@ -570,7 +570,7 @@ echo
     
     
 
-  <form action='budget_home.php#boolean' target='_blank' method="GET">
+  <form action='index.php#boolean' target='_blank' method="GET">
 <div id='form' role='form'>
    <lable for="search_term"><input type="text"  id="search_term" name="search_term" value="pharmaceutical" /></lable>
   

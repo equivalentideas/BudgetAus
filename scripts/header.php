@@ -102,7 +102,7 @@ echo
  
    <div id='contact_nav'>
      
-   <div class='links'><a href='http://infoaus.net/budget/about.php'>About BudgetAus</a></div>
+   <div class='links'><a href='http://infoaus.net/about.php'>About BudgetAus</a></div>
 <div class='links'><a href='http://facebook.com/BudgetAus'>Facebook</a></div>
 <div class='links'><a href='http://twitter.com/Info_Aus'>Twitter</a></div>
 <div class='links'><a href='http://infoaus.net/wp'>Blog</a></div>
