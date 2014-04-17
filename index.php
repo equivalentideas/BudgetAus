@@ -286,12 +286,12 @@ include('scripts/db.php');
 <h5>This form lists all the Programs administered by the Agencies where your search term is part of the Agency name eg research or housing. </h5>
   <form action="agency_results.php" target='_blank' method="GET">
 <div role="form">
-   <lable for="agency_search"><input type="text"  id="agency" name="agency" value="" /></lable>
+   <lable for="agency_search"><input type="text"  id="agency" name="agency" value="health" /></lable>
   
    <lable for="budget_year">
 <select name='budget_year'>
-<option value='last'>Last</option>
 <option value='current'>Current</option>
+<option value='last'>Last</option>
 
 </select>
    </lable>
@@ -310,7 +310,13 @@ include('scripts/db.php');
 <form action='program_results.php' target='_blank' method="GET">
 <div role="form">
    <lable for="program_search"><input type="text"  id="program" name="program" value="refugee" /></lable>
-  
+     <lable for="budget_year">
+<select name='budget_year'>
+<option value='current'>Current</option>
+<option value='last'>Last</option>
+
+</select>
+   </lable>
    <lable for="submit"><input type="submit" name="submit" value="Show" id="submit" /></lable>
  
   
@@ -329,10 +335,11 @@ include('scripts/db.php');
     
    <lable for="budget_year">
 <select name='budget_year'>
-<option value='last'>Last</option>
 <option value='current'>Current</option>
+<option value='last'>Last</option>
 
 </select>
+   </lable>
    <lable for="submit"><input type="submit" name="submit" value="Show" id="submit" /></lable>
  
   
