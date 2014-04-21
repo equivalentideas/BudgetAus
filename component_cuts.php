@@ -79,7 +79,7 @@ echo
 <tr>
 
 
-<td width='400px'><a href='2013-14/agency_results.php?agency=%22".mysql_result($agency_results,$j, 'Agency')."%22'  target='_blank' title='Agency Results for ".mysql_result($agency_results,$j, 'Agency')." - opens in new window'>".mysql_result($agency_results,$j, 'Agency')."
+<td width='400px'><a href='agency_results.php?agency=%22".mysql_result($agency_results,$j, 'Agency')."%22'  target='_blank' title='Agency Results for ".mysql_result($agency_results,$j, 'Agency')." - opens in new window'>".mysql_result($agency_results,$j, 'Agency')."
 </a></td>
 
 </tr></table>";
@@ -171,7 +171,7 @@ if (mysql_select_db($db_database))
 
 echo
 "<h3>Biggest Scheme Cuts by Comparison with 2012-13 Funding</h3>";
-$result = mysql_query("SELECT * FROM budget_table2 WHERE (current-last) <0  ORDER BY (current-last)  LIMIT 100");
+$result = mysql_query("SELECT * FROM budget_table2 WHERE (current-last) <0  ORDER BY (current-last) ");
  $num_rows = mysql_num_rows($result);
         ($rows = mysql_num_rows($result));
 
@@ -200,13 +200,13 @@ for ($j = 0 ; $j < $rows ; ++$j)
 </tr>
 <TR>
 
-<TD>2012/13 <br></td>
+<TD>Last<br></td>
 <td class='money'>  $".number_format(mysql_result($result,$j, 'last')).",000 
 </TD>
 
 </TR>
 <TR>
-<TD>2013/14 <br></td>
+<TD>Current <br></td>
 
 <td class='money'> $".number_format(mysql_result($result,$j, 'current')).",000 </TD>
 
@@ -218,7 +218,7 @@ for ($j = 0 ; $j < $rows ; ++$j)
 <TD class='left'>Difference </td>
 
 <td class='money'>
-$".number_format(mysql_result($result,$j, 'Difference')).",000 
+".number_format(mysql_result($result,$j, 'current')- mysql_result($result,$j, 'last')).",000
  </td>
 </TR>
 

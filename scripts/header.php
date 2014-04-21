@@ -89,7 +89,7 @@ echo
 
 
   <div id='header2'>
-      <a href='/'  title='BudgetAus Home page'>
+      <a href='http://infoaus.net/budget/index.php'  title='BudgetAus Home page'>
 <img src='http://infoaus.net/budgetaus_logo.jpg'></img></a>
 </div><!--header2-->
 </div>

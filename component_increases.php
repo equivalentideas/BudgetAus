@@ -1,16 +1,15 @@
 <?php include('scripts/header.php');?>   
       <div id="blog" role="complimentary">
     
- 	    
-  
+ 	  
 <div class='featured'>
 
-    <h3>Search All Fields &nbsp;&nbsp;&nbsp;<a href="index.php">Clear</a></h3>
+    <h3>Search All Fields &nbsp;&nbsp;&nbsp;<a href="budget_home.php">Clear</a></h3>
 <h5>This form gives Budget results from all fields eg health, education.</h5>
     
     
 
-  <form action='scheme_increase_by_comparison.php' method="GET">
+  <form action='boolean_search_results.php' method="GET">
 <div id='form' role='form'>
    <lable for="search_term"><input type="text"  id="search_term" name="search_term" value='health' /></lable>
   
@@ -77,7 +76,7 @@ echo
 <tr>
 
 
-<td width='400px'><a href='2013-14/agency_results.php?agency=%22".mysql_result($agency_results,$j, 'Agency')."%22'  target='_blank' title='Agency Results for ".mysql_result($agency_results,$j, 'Agency')." - opens in new window'>".mysql_result($agency_results,$j, 'Agency')."
+<td width='400px'><a href='agency_results.php?agency=%22".mysql_result($agency_results,$j, 'Agency')."%22'  target='_blank' title='Agency Results for ".mysql_result($agency_results,$j, 'Agency')." - opens in new window'>".mysql_result($agency_results,$j, 'Agency')."
 </a></td>
 
 </tr></table>";
@@ -164,7 +163,7 @@ if (mysql_select_db($db_database))
 
 echo
 "<h3>Biggest Scheme Increases by Comparison with 2012-13 Funding</h3>";
-$result = mysql_query("SELECT * FROM budget_table2 WHERE (current-last) > 0 ORDER BY (current-last) DESC LIMIT 100");
+$result = mysql_query("SELECT * FROM budget_table2 WHERE (current-last) > 0 ORDER BY (current-last) DESC ");
  $num_rows = mysql_num_rows($result);
         ($rows = mysql_num_rows($result));
 
@@ -191,6 +190,20 @@ for ($j = 0 ; $j < $rows ; ++$j)
 <a href='scheme_results.php?scheme=%22".mysql_result($result,$j, 'Component')."%22' target='_blank' title=' Get totals for ".mysql_result($result,$j, 'Component')." - opens in new window'>".mysql_result($result,$j, 'Component')."</a></TD>
 
 </tr>
+
+<TR>
+
+<TD>Last <br></td>
+<td class='money'>  $".number_format(mysql_result($result,$j, 'last')).",000 
+</TD>
+
+</TR>
+<TR>
+<TD>Current <br></td>
+
+<td class='money'> $".number_format(mysql_result($result,$j, 'current')).",000 </TD>
+
+</TR>
 <TR>
 <TD class='left'>Difference </td>
 
@@ -198,20 +211,6 @@ for ($j = 0 ; $j < $rows ; ++$j)
 $".number_format((mysql_result($result,$j, 'current'))-(mysql_result($result,$j, 'last'))).",000 
  </td>
 </TR>
-<TR>
-
-<TD>2012/13 <br></td>
-<td class='money'>  $".number_format(mysql_result($result,$j, 'last')).",000 
-</TD>
-
-</TR>
-<TR>
-<TD>2013/14 <br></td>
-
-<td class='money'> $".number_format(mysql_result($result,$j, 'current')).",000 </TD>
-
-</TR>
-
 
 
 

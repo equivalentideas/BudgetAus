@@ -4,11 +4,11 @@
 <div id='chart'></div>
 
  <div class="featured"> 
-<h3>Agency Search</h3>
-<h5>This form lists all the Programs administered by the Agencies where your search term is part of the Agency name eg research or housing. </h5>
-  <form action="us_agency_results.php" target='_blank' method="GET">
+<h3>bureau Search</h3>
+<h5>This form lists all the entries by the Sub-Function where your search term matches the Sub-Function eg research or housing. Find an explanation of Functions & Subfunctions <a href='http://www.gpo.gov/fdsys/pkg/BUDGET-2015-DB/pdf/BUDGET-2015-DB-4.pdf'>here</a></h5>
+  <form action="us_bureau_results.php" target='_blank' method="GET">
 <div role="form">
-   <lable for="agency_search"><input type="text"  id="agency" name="agency" value="" /></lable>
+   <lable for="bureau_search"><input type="text"  id="bureau" name="bureau" value="" /></lable>
   
    <lable for="submit"><input type="submit" name="submit" value="Show" id="submit" /></lable>
 
@@ -22,22 +22,22 @@ include('scripts/db.php');
  if (mysql_select_db($db_database))
  
 {
-$agency = $_GET['agency']; 
+$bureau = $_GET['bureau']; 
 }
 
-    if (isset($_GET['agency']))
+    if (isset($_GET['bureau']))
     
-  $result2 =  mysql_query("SELECT Portfolio,Program,Agency,value12_13,sum(value12_13),value13_14,sum(value13_14),value14_15,sum(value14_15),value15_16,sum(value15_16),value16_17,sum(value16_17) 
-FROM budget_us  WHERE MATCH(Agency) AGAINST('$agency'IN BOOLEAN MODE) group by program ");
+  $result2 =  mysql_query("SELECT agency,subfunction,bureau,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
+FROM budget_us  WHERE MATCH(bureau) AGAINST('$bureau'IN BOOLEAN MODE) group by subfunction ");
 
     $num_rows = mysql_num_rows($result2);
        ($rows = mysql_num_rows($result2));
      echo
   "<div class='button'>
-  <a href='http://infoaus.net/budget/2013-14/agency_results_doc.php?agency=%22".$agency."%22' 
+  <a href='bureau_results_doc.php?bureau=%22".$bureau."%22' 
   target='_blank'>Word</a></div>
    <div class='button'>
-   <a href='http://infoaus.net/budget/2013-14/agency_results_excel.php?agency=%22".$agency."%22' 
+   <a href='bureau_results_excel.php?bureau=%22".$bureau."%22' 
    target='_blank'>Excel</a></div><p></p>";
 for ($j = 0 ; $j < $rows ; ++$j)
 {
@@ -47,16 +47,16 @@ ECHO
 "<TABLE class='two'>
 <TR>
 <TD>
-<a href='http://infoaus.net/budget/2013-14/us_program_results.php?program=".mysql_result($result2,$j,
- 'program')."' target='_blank' title='Get programs for this agency in new window'>
- ".mysql_result($result2,$j, 'program')."</a>
+<a href='us_subfunction_results.php?subfunction=".mysql_result($result2,$j,
+ 'subfunction')."' target='_blank' title='Get subfunctions for this bureau in new window'>
+ ".mysql_result($result2,$j, 'subfunction')."</a>
 </TD></TR>
 <TR>
 <TD class='money'>
-<span class='inlinesparkline'>".mysql_result($result2,$j, 'sum(value12_13)')."000,
-".mysql_result($result2,$j, 'sum(value13_14)')."000,".mysql_result($result2,$j, 
-'sum(value14_15)')."000,".mysql_result($result2,$j, 'sum(value15_16)')."000,
-".mysql_result($result2,$j, 'sum(value16_17)')."000   </span>
+<span class='inlinesparkline'>".mysql_result($result2,$j, 'sum(last)')."000,
+".mysql_result($result2,$j, 'sum(current)')."000,".mysql_result($result2,$j, 
+'sum(plus1)')."000,".mysql_result($result2,$j, 'sum(plus2)')."000,
+".mysql_result($result2,$j, 'sum(plus3)')."000   </span>
  </td></tr>
 </table>";
 }
@@ -101,39 +101,39 @@ include('scripts/db.php');
 
 if (mysql_select_db($db_database))
 {
-$agency = $_GET['agency']; 
+$bureau = $_GET['bureau']; 
 }
 
-    if (isset($_GET['agency']))
+    if (isset($_GET['bureau']))
     
   
-$total_last_calc = mysql_query("SELECT value12_13,sum(value12_13) FROM budget_us");
+$total_last_calc = mysql_query("SELECT last,sum(last) FROM budget_us");
 $num_rows = mysql_num_rows($total_last_calc);
 ($rows = mysql_num_rows($total_last_calc));
 for ($j = 0 ; $j < $rows ; ++$j)
-$total_last = "".mysql_result($total_last_calc,$j, 'SUM(value12_13)')."";
+$total_last = "".mysql_result($total_last_calc,$j, 'SUM(last)')."";
 
 
-$total_current_calc = mysql_query("SELECT value13_14,sum(value13_14) FROM budget_us");
+$total_current_calc = mysql_query("SELECT current,sum(current) FROM budget_us");
 $num_rows = mysql_num_rows($total_current_calc);
 ($rows = mysql_num_rows($total_current_calc));
 for ($j = 0 ; $j < $rows ; ++$j)
-$total_current = "".mysql_result($total_current_calc,$j, 'SUM(value13_14)')."";
+$total_current = "".mysql_result($total_current_calc,$j, 'SUM(current)')."";
 
-$query_total_last = mysql_query("SELECT value12_13,sum(value12_13) from `budget_us` 
-WHERE MATCH(Agency) AGAINST('$agency' IN BOOLEAN MODE) group by '$agency' ");
+$query_total_last = mysql_query("SELECT last,sum(last) from `budget_us` 
+WHERE MATCH(bureau) AGAINST('$bureau' IN BOOLEAN MODE) group by '$bureau' ");
 $num_rows = mysql_num_rows($query_total_last);
 ($rows = mysql_num_rows($query_total_last));
 for ($j = 0 ; $j < $rows ; ++$j)
-$query_total_last_year = "".mysql_result($query_total_last,$j, 'SUM(value12_13)')."";
+$query_total_last_year = "".mysql_result($query_total_last,$j, 'SUM(last)')."";
 ////////////////////////////////////////////////////////////////////
 
-$query_total_current = mysql_query("SELECT value13_14,sum(value13_14) from `budget_us`
- WHERE MATCH(Agency) AGAINST('$agency' IN BOOLEAN MODE) group by  '$agency'");
+$query_total_current = mysql_query("SELECT current,sum(current) from `budget_us`
+ WHERE MATCH(bureau) AGAINST('$bureau' IN BOOLEAN MODE) group by  '$bureau'");
 $num_rows = mysql_num_rows($query_total_current);
 ($rows = mysql_num_rows($query_total_current));
 for ($j = 0 ; $j < $rows ; ++$j)
-$query_total_current_year = "".mysql_result($query_total_current,$j, 'SUM(value13_14)')."";
+$query_total_current_year = "".mysql_result($query_total_current,$j, 'SUM(current)')."";
 
 //////////////////////////////////////////////////////////////////////////////////////////
 $percent = (($query_total_current_year/$total_current)*100);
@@ -145,12 +145,12 @@ $dif_percentage = ($query_total_current_year/$query_total_last_year)*100;
 ///////////////////////////////////////////////////
 
 
-$billion_ = mysql_query("SELECT value13_14,sum(value13_14) from `budget_us`
- WHERE MATCH(Agency) AGAINST('$agency' IN BOOLEAN MODE)group by  '$agency' ");
+$billion_ = mysql_query("SELECT current,sum(current) from `budget_us`
+ WHERE MATCH(bureau) AGAINST('$bureau' IN BOOLEAN MODE)group by  '$bureau' ");
 $num_rows = mysql_num_rows($billion_);
 ($rows = mysql_num_rows($billion_));
 for ($j = 0 ; $j < $rows ; ++$j)
- $value = "".mysql_result($billion_,$j, 'SUM(value13_14)')."";
+ $value = "".mysql_result($billion_,$j, 'SUM(current)')."";
  $billion = ($value/1000000); //divides this year's value by 1 m
 ///////////////////////////////////////////////////////////////////////
 //echo "".$value"";
@@ -171,65 +171,67 @@ include('scripts/tax_totals.php');
     
     
     
-    {
+    
 
      
 
 //////////////////////////////////////////////////////////////////
 
-     $result_agency =  mysql_query("SELECT Portfolio,Program,Agency,value12_13,sum(value12_13),value13_14,sum(value13_14),value14_15,sum(value14_15),value15_16,sum(value15_16),value16_17,sum(value16_17) 
+     $result_bureau =  mysql_query("SELECT agency,subfunction,bureau,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
  
-FROM  `budget_us` WHERE MATCH (agency) AGAINST ('$agency'IN BOOLEAN MODE) group by agency");
- $num_rows = mysql_num_rows($result_agency);
+FROM  `budget_us` WHERE MATCH (bureau) AGAINST ('$bureau'IN BOOLEAN MODE) group by bureau");
+ $num_rows = mysql_num_rows($result_bureau);
 if ($num_rows>0)
-        echo 
-      "<h3>Search Term: $agency</h3>
-<h4>Number of Agencies ".$num_rows."</h4>";
-        ($rows = mysql_num_rows($result_agency));
 {
+        echo 
+      "<h3>Search Term: $bureau</h3>
+<h4>Number of Agencies ".$num_rows."</h4>";
+        ($rows = mysql_num_rows($result_bureau));
+
 for ($j = 0 ; $j < $rows ; ++$j)
       echo
    "<table class='results'>
-<tr><td width='30px'>Portfolio</td>
+<tr><td width='30px'>agency</td>
 <td width='300px'>
-<a href='http://infoaus.net/budget/2013-14/us_portfolio_results.php?portfolio=%22".mysql_result($result_agency,$j, 'Portfolio')."%22'  target='_blank' title='Find all Portfolio results for ".mysql_result($result_agency,$j, 'Portfolio')." - opens in new window'>".mysql_result($result_agency,$j, 'Portfolio')."</a>
+<a href='us_portfolio_results.php?agency=%22".mysql_result($result_bureau,$j, 'agency')."%22'  target='_blank' title='Find all agency results for ".mysql_result($result_bureau,$j, 'agency')." - opens in new window'>".mysql_result($result_bureau,$j, 'agency')."</a>
 </td></tr>
-<tr><td class='left'>Agency</td>
-<td><a href='http://infoaus.net/budget/2013-14/us_agency_results.php?agency=%22".mysql_result($result_agency,$j, 'Agency')."%22'   title='Find all Agency results for ".mysql_result($result_agency,$j, 'Agency')." 'target='_blank' '>".mysql_result($result_agency,$j, 'Agency')."</a>
+<tr><td class='left'>bureau</td>
+<td><a href='us_bureau_results.php?bureau=%22".mysql_result($result_bureau,$j, 'bureau')."%22'   title='Find all bureau results for ".mysql_result($result_bureau,$j, 'bureau')." 'target='_blank' '>".mysql_result($result_bureau,$j, 'bureau')."</a>
 </td></tr>
       
 <TR>
-<td>2012/13</td><TD class='money'>$".number_format(mysql_result($result_agency,$j, 'sum(value12_13)')).",000  </TD></tr><tr>
-<td>2013/14</td><TD class='money'>$".number_format(mysql_result($result_agency,$j, 'sum(value13_14)')).",000  </TD></tr><tr>
-<td>2014/15</td><TD class='money'>$".number_format(mysql_result($result_agency,$j, 'sum(value14_15)')).",000  </td></tr><tr>
-<td>2015/16</td><TD class='money'>$".number_format(mysql_result($result_agency,$j, 'sum(value15_16)')).",000  </td></tr><tr>
-<td>2016/17</td><TD class='money'>$".number_format(mysql_result($result_agency,$j, 'sum(value16_17)')).",000  </td></tr><tr>
+<td>2012/13</td><TD class='money'>$".number_format(mysql_result($result_bureau,$j, 'sum(last)')).",000  </TD></tr><tr>
+<td>2013/14</td><TD class='money'>$".number_format(mysql_result($result_bureau,$j, 'sum(current)')).",000  </TD></tr><tr>
+<td>2014/15</td><TD class='money'>$".number_format(mysql_result($result_bureau,$j, 'sum(plus1)')).",000  </td></tr><tr>
+<td>2015/16</td><TD class='money'>$".number_format(mysql_result($result_bureau,$j, 'sum(plus2)')).",000  </td></tr><tr>
+<td>2016/17</td><TD class='money'>$".number_format(mysql_result($result_bureau,$j, 'sum(plus3)')).",000  </td></tr><tr>
 <td>Trend</td><TD class='money'>
-<span class='inlinesparkline'>".mysql_result($result_agency,$j, 'sum(value12_13)')."000,".mysql_result($result_agency,$j, 'sum(value13_14)')."000,".mysql_result($result_agency,$j, 'sum(value14_15)')."000,".mysql_result($result,$j, 'sum(value15_16)')."000,".mysql_result($result,$j, 'sum(value16_17)')."000   </span>
+<span class='inlinesparkline'>".mysql_result($result_bureau,$j, 'sum(last)')."000,".mysql_result($result_bureau,$j, 'sum(current)')."000,".mysql_result($result_bureau,$j, 'sum(plus1)')."000,".mysql_result($result,$j, 'sum(plus2)')."000,".mysql_result($result,$j, 'sum(plus3)')."000   </span>
  </td></tr>
 </table>";
 
 //////////////////////////////////////////////////////////////////////////////////////
+  }
   
-  
- }
+ 
  
  if ($num_rows ==0)
  {
+ 
   echo
-  "<p>Sorry there are no Agency names containing the term ".$agency.". 
+  "<p>Sorry there are no bureau names containing the term ".$bureau.". 
   Check spelling or the results below or try a similar term.</p>";
   
 
 
-{
-$portfolio_results =  mysql_query("SELECT Portfolio from budget_us WHERE Portfolio LIKE('%".$agency."%') 
-Group by Portfolio ");
+
+$portfolio_results =  mysql_query("SELECT agency from budget_us WHERE agency LIKE('%".$bureau."%') 
+Group by agency ");
 
  $num_rows = mysql_num_rows($portfolio_results);
  ($rows = mysql_num_rows($portfolio_results));
   
-echo "<h5>There is a total of ".$num_rows." Portfolios with ".$agency." in their name.</h5>";
+echo "<h5>There is a total of ".$num_rows." Portfolios with ".$bureau." in their name.</h5>";
 for ($j = 0 ; $j < $rows ; ++$j)
 echo 
 "<table class='results'>
@@ -237,35 +239,35 @@ echo
 
 <tr>
 
-<td> <a href='us_portfolio_results.php?portfolio=%22".mysql_result($portfolio_results,$j, 'Portfolio')."%22'  target='_blank' title='Portfolio Results for ".mysql_result($portfolio_results,$j, 'Portfolio')." - opens in new window'>".mysql_result($portfolio_results,$j, 'Portfolio')."</a></td>
+<td> <a href='us_portfolio_results.php?agency=%22".mysql_result($portfolio_results,$j, 'agency')."%22'  target='_blank' title='agency Results for ".mysql_result($portfolio_results,$j, 'agency')." - opens in new window'>".mysql_result($portfolio_results,$j, 'agency')."</a></td>
 
 </tr>
 </table>";
 ///////////////////////////////////////////////////////////
 
-$agency_results =  mysql_query("SELECT Portfolio,program,Agency from budget_us WHERE MATCH(AGENCY) AGAINST('$agency' in BOOLEAN MODE) Group by Agency ");
+$bureau_results =  mysql_query("SELECT agency,subfunction,bureau from budget_us WHERE MATCH(AGENCY) AGAINST('$bureau' in BOOLEAN MODE) Group by bureau ");
 
- $num_rows = mysql_num_rows($agency_results);
- ($rows = mysql_num_rows($agency_results));
+ $num_rows = mysql_num_rows($bureau_results);
+ ($rows = mysql_num_rows($bureau_results));
   
-echo "<h5>There is a total of ".$num_rows." Agencies with ".$agency." in their name.</h5>";
+echo "<h5>There is a total of ".$num_rows." Agencies with ".$bureau." in their name.</h5>";
 for ($j = 0 ; $j < $rows ; ++$j)
 echo 
 "<table class='results'>
 <tr>
 
 
-<td><a href='us_agency_results.php?agency=%22".mysql_result($agency_results,$j, 'Agency')."%22'  target='_blank' title='Agency Results for ".mysql_result($agency_results,$j, 'Agency')." - opens in new window'>".mysql_result($agency_results,$j, 'Agency')."</a></td>
+<td><a href='us_bureau_results.php?bureau=%22".mysql_result($bureau_results,$j, 'bureau')."%22'  target='_blank' title='bureau Results for ".mysql_result($bureau_results,$j, 'bureau')." - opens in new window'>".mysql_result($bureau_results,$j, 'bureau')."</a></td>
 
 </tr></table>";
 /////////////////////////////////////////////////////////////////
 
-$agency_results =  mysql_query("SELECT portfolio,agency,Program from budget_us WHERE Agency LIKE('%".$agency."%') Group by Program  ");
+$bureau_results =  mysql_query("SELECT agency,bureau,subfunction from budget_us WHERE bureau LIKE('%".$bureau."%') Group by subfunction  ");
 
- $num_rows = mysql_num_rows($agency_results);
- ($rows = mysql_num_rows($agency_results));
+ $num_rows = mysql_num_rows($bureau_results);
+ ($rows = mysql_num_rows($bureau_results));
   
-echo "<h5>There is a total of ".$num_rows." Programs with ".$agency." in their name.</h5>
+echo "<h5>There is a total of ".$num_rows." Programs with ".$bureau." in their name.</h5>
 </a>";
 for ($j = 0 ; $j < $rows ; ++$j)
 echo 
@@ -273,75 +275,66 @@ echo
 <tr>
 
 <td>
-<a href='us_program_results.php?program=%22".mysql_result($agency_results,$j, 'Program')."%22'  target='_blank' title='Find Program Results for ".mysql_result($agency_results,$j, 'Program')." - opens in new window'>".mysql_result($agency_results,$j, 'Program')."</a></td>
+<a href='us_program_results.php?subfunction=%22".mysql_result($bureau_results,$j, 'subfunction')."%22'  target='_blank' title='Find subfunction Results for ".mysql_result($bureau_results,$j, 'subfunction')." - opens in new window'>".mysql_result($bureau_results,$j, 'subfunction')."</a></td>
 </tr>
 </table>";
 //////////////////////////////////////////////////////////////////
 
-$scheme_results =  mysql_query("SELECT Portfolio,Agency,Program,Objective from budget_us WHERE objective LIKE('%".$agency."%') ");
+$scheme_results =  mysql_query("SELECT agency,bureau,subfunction,Component from budget_us WHERE Component LIKE('%".$bureau."%') ");
 
  $num_rows = mysql_num_rows($scheme_results);
  ($rows = mysql_num_rows($scheme_results));
   
-echo "<h5>There is a total of ".$num_rows." Schemes with ".$agency." in their name.</h5>
+echo "<h5>There is a total of ".$num_rows." Schemes with ".$bureau." in their name.</h5>
 </a>";
 for ($j = 0 ; $j < $rows ; ++$j)
 echo 
 "<div class='content'>
 <h4>
-<a href='us_agency_results.php?agency=%22".mysql_result($scheme_results,$j, 'agency')."%22&submit=Show'  target='_blank' title='Scheme Results for ".mysql_result($scheme_results,$j, 'agency')."'>".mysql_result($scheme_results,$j, 'agency')."</a>
+<a href='us_bureau_results.php?bureau=%22".mysql_result($scheme_results,$j, 'bureau')."%22&submit=Show'  target='_blank' title='Scheme Results for ".mysql_result($scheme_results,$j, 'bureau')."'>".mysql_result($scheme_results,$j, 'bureau')."</a>
 </h4>
 <p>
-<a href='us_program_results.php?program=%22".mysql_result($scheme_results,$j, 'Program')."%22&submit=Show'  target='_blank' title='Scheme Results for ".mysql_result($scheme_results,$j, 'Program')."'>".mysql_result($scheme_results,$j, 'Program')."</a>
+<a href='us_program_results.php?subfunction=%22".mysql_result($scheme_results,$j, 'subfunction')."%22&submit=Show'  target='_blank' title='Scheme Results for ".mysql_result($scheme_results,$j, 'subfunction')."'>".mysql_result($scheme_results,$j, 'subfunction')."</a>
 </p>
-<p><a href='us_scheme_results.php?scheme=%22".mysql_result($scheme_results,$j, 'Objective')."%22&submit=Show'  target='_blank' title='Scheme Results for ".mysql_result($scheme_results,$j, 'Objective')."'>".mysql_result($scheme_results,$j, 'Objective')."</a>
+<p><a href='us_scheme_results.php?scheme=%22".mysql_result($scheme_results,$j, 'Component')."%22&submit=Show'  target='_blank' title='Scheme Results for ".mysql_result($scheme_results,$j, 'Component')."'>".mysql_result($scheme_results,$j, 'Component')."</a>
 </p>
 </div>";
 //////////////////////////////////////////////////////////////////
 
-
-
-
-
-}
-
-
-
-  }
   
 
-$result = mysql_query("SELECT portfolio,Program,Agency,value12_13,sum(value12_13),value13_14,sum(value13_14),value14_15,sum(value14_15),value15_16,sum(value15_16),value16_17,sum(value16_17) 
-FROM budget_us WHERE MATCH(Agency) AGAINST('$agency' IN BOOLEAN MODE) GROUP BY PROGRAM order by agency");
+$result = mysql_query("SELECT agency,subfunction,bureau,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
+FROM budget_us WHERE MATCH(bureau) AGAINST('$bureau' IN BOOLEAN MODE) GROUP BY subfunction order by bureau");
 
     $num_rows = mysql_num_rows($result);
     echo "<h4>Number of Programs ".$num_rows."</h4>";
     ($rows = mysql_num_rows($result));
 
 for ($j = 0 ; $j < $rows ; ++$j)
-{
+
 
  echo
    "<table class='results'>
-   <tr><td class='left'>Agency</td>
-<td><a href='http://infoaus.net/budget/2013-14/us_agency_results.php?agency=%22".mysql_result($result,$j, 'Agency')."%22'   title='Find all Agency results for ".mysql_result($result,$j, 'Agency')." 'target='_blank' '>".mysql_result($result,$j, 'Agency')."</a>
+   <tr><td class='left'>bureau</td>
+<td><a href='us_bureau_results.php?bureau=%22".mysql_result($result,$j, 'bureau')."%22'   title='Find all bureau results for ".mysql_result($result,$j, 'bureau')." 'target='_blank' '>".mysql_result($result,$j, 'bureau')."</a>
 </td></tr>
 <tr>
-<td width='30px'>Program</td>
-<td><a href='http://infoaus.net/budget/2013-14/us_program_results.php?program=%22".mysql_result($result,$j, 'Program')."%22'   title='Find all Scheme results for ".mysql_result($result,$j, 'Program')." 'target='_blank' '>".mysql_result($result,$j, 'Program')."</a>
+<td width='30px'>subfunction</td>
+<td><a href='us_program_results.php?subfunction=%22".mysql_result($result,$j, 'subfunction')."%22'   title='Find all Scheme results for ".mysql_result($result,$j, 'subfunction')." 'target='_blank' '>".mysql_result($result,$j, 'subfunction')."</a>
 </td></tr>  
 <TR>
-<td>12/13</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(value12_13)')).",000  </TD></tr><tr>
-<td>13/14</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(value13_14)')).",000  </TD></tr><tr>
-<td>14/15</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(value14_15)')).",000  </td></tr><tr>
-<td>15/16</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(value15_16)')).",000  </td></tr><tr>
-<td>16/17</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(value16_17)')).",000  </td></tr><tr>
+<td>12/13</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>
+<td>13/14</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>
+<td>14/15</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
+<td>15/16</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
+<td>16/17</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr><tr>
 <td>Trend</td><TD class='money'>
-<span class='inlinesparkline'>".mysql_result($result,$j, 'sum(value12_13)')."000,".mysql_result($result,$j, 'sum(value13_14)')."000,".mysql_result($result,$j, 'sum(value14_15)')."000,".mysql_result($result,$j, 'sum(value15_16)')."000,".mysql_result($result,$j, 'sum(value16_17)')."000   </span>
+<span class='inlinesparkline'>".mysql_result($result,$j, 'sum(last)')."000,".mysql_result($result,$j, 'sum(current)')."000,".mysql_result($result,$j, 'sum(plus1)')."000,".mysql_result($result,$j, 'sum(plus2)')."000,".mysql_result($result,$j, 'sum(plus3)')."000   </span>
  </td></tr>
 </table>";
-}
-  
-}
+
+  }
+
 ?>
 
 </div>
