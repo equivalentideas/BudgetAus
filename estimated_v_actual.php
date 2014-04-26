@@ -49,7 +49,7 @@ $agency = $_GET['agency'];
 {
 $budget_year = $_GET['budget_year']; 
 }
-if (!isset($agency['agency']))
+if(!isset($_GET['agency']))
   {
 $agencies_all = mysql_query("SELECT last,sum(last),current,sum(current),agency,source,url,acronym from budget_table GROUP BY AGENCY ");//creates list of all agencies which provide clickable links that trigger results for that agency
  $num_rows = mysql_num_rows($agencies_all);
@@ -95,8 +95,6 @@ FROM budget_table  WHERE MATCH(Agency,Acronym) AGAINST('$agency' IN BOOLEAN MODE
 $result_current =  mysql_query("SELECT Portfolio,Program,Agency,Acronym,last,sum(last),current,sum(current),source,url 
 FROM budget_table2  WHERE MATCH(Agency,Acronym) AGAINST('$agency' IN BOOLEAN MODE) GROUP BY Agency ");//this query asks for the total for the agencies matching the user input search term from the CURRENT BUDGET YEAR DATA for the column relating to 'last' year. This is going to be the ACTUAL spend as these are the REVISED figures for what was ESTIMATED in last year's budget data. With the value from this query and the one above, these two values can be compared and a difference calculated between ESTIMATED and ACTUAL spend for agencies that match the search term. This search is BOOLEAN. 
        
-       
-
  $num_rows = mysql_num_rows($result_current);
 
    ($rows = mysql_num_rows($result_current));
@@ -176,9 +174,9 @@ $".number_format(mysql_result($result_current_non_boolean, $j, 'sum(last)')).",0
 //////////////////////////////////////////////////////////////////////////////////////  
 }
 
-
+}
 		
-		}
+		
 ?>
 
 </div>
