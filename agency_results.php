@@ -5,7 +5,7 @@
 <h5>This form lists all the Programs administered by the Agencies where your search term is part of the Agency name eg research or housing. </h5>
   <form action="agency_results.php" target='_blank' method="GET">
 <div role="form">
-   <lable for="agency_search"><input type="text"  id="agency" name="agency" value="" /></lable>
+   <lable for="agency_search"><input type="text"  id="agency" name="agency" value="health" /></lable>
   
    <lable for="budget_year">
 <select name='budget_year'>
@@ -47,6 +47,13 @@ $budget_year = $_GET['budget_year'];
 
    if ($budget_year =='current')
    {
+   
+$total_current = mysql_query("SELECT CURRENT,SUM(CURRENT) FROM budget_table2 ");
+   $num_rows = mysql_num_rows($total_current);
+($rows = mysql_num_rows($total_current));
+for ($j = 0 ; $j < $rows ; ++$j)
+$total_current = "".mysql_result($total_current,$j, 'SUM(current)')."";//assigns this value to a variable.
+///////////////////////////////////////////
 $query_total_last = mysql_query("SELECT last,sum(last) from budget_table2 
 WHERE MATCH(Agency) AGAINST('$agency' IN BOOLEAN MODE) group by '$agency' ");//calculates total funding for the prior budget year for agencies where search term forms part of their name
 $num_rows = mysql_num_rows($query_total_last);
@@ -86,6 +93,14 @@ $TOS = ($actual_TOS/$total_current)*100/1;
 }
    if ($budget_year =='last')
    {
+     
+$total_current = mysql_query("SELECT CURRENT,SUM(CURRENT) FROM budget_table2 ");
+   $num_rows = mysql_num_rows($total_current);
+($rows = mysql_num_rows($total_current));
+for ($j = 0 ; $j < $rows ; ++$j)
+$total_current = "".mysql_result($total_current,$j, 'SUM(current)')."";//assigns this value to a variable.
+
+/////////////////////////////////////////////////////////////////
 $query_total_last = mysql_query("SELECT last,sum(last) from budget_table 
 WHERE MATCH(Agency) AGAINST('$agency' IN BOOLEAN MODE) group by '$agency' ");//calculates total funding for the prior budget year for agencies where search term forms part of their name
 $num_rows = mysql_num_rows($query_total_last);
@@ -102,7 +117,8 @@ for ($j = 0 ; $j < $rows ; ++$j)
 $query_total_current_year = "".mysql_result($query_total_current,$j, 'SUM(current)')."";//assign this value to a variable
 
 //////////////////////////////////////////////////////////////////////////////////////////
-$percent = (($query_total_current_year/$total_current)*100);//$percent variable is used in tax_totals.php and the Flot pie graph
+$percent = (($query_total_current_year/$total_current)*100/1);//$percent variable is used in tax_totals.php and the Flot pie graph
+echo "$percent";
 //////////////////////////////////////////////////////////////////////////////////////////
 
 $billion_ = mysql_query("SELECT current,sum(current) from budget_table

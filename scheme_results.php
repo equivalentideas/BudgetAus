@@ -1,3 +1,6 @@
+
+application/x-httpd-php scheme_results.php 
+PHP script text
 <?php include('scripts/header.php');?>      
 <div id="blog" role="complimentary">
  <div class="featured"> 
@@ -47,6 +50,12 @@ $budget_year = $_GET['budget_year'];
 
    if ($budget_year =='current')
    {
+$total_current = mysql_query("SELECT CURRENT,SUM(CURRENT) FROM budget_table2 ");
+   $num_rows = mysql_num_rows($total_current);
+($rows = mysql_num_rows($total_current));
+for ($j = 0 ; $j < $rows ; ++$j)
+$total_current = "".mysql_result($total_current,$j, 'SUM(current)')."";//assigns this value to a variable.
+/////////////////////////////////////////////////
 $query_total_last = mysql_query("SELECT last,sum(last) from budget_table2 
 WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE)  ");//calculates total funding for the prior budget year for agencies where search term forms part of their name
 $num_rows = mysql_num_rows($query_total_last);
@@ -86,6 +95,12 @@ $TOS = ($actual_TOS/$total_current)*100/1;
 }
    if ($budget_year =='last')
    {
+$total_current = mysql_query("SELECT CURRENT,SUM(CURRENT) FROM budget_table2 ");
+   $num_rows = mysql_num_rows($total_current);
+($rows = mysql_num_rows($total_current));
+for ($j = 0 ; $j < $rows ; ++$j)
+$total_current = "".mysql_result($total_current,$j, 'SUM(current)')."";//assigns this value to a variable.
+/////////////////////////////////////////////////
 $query_total_last = mysql_query("SELECT last,sum(last) from budget_table 
 WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE) ");//calculates total funding for the prior budget year for agencies where search term forms part of their name
 $num_rows = mysql_num_rows($query_total_last);
@@ -248,7 +263,7 @@ $agency_results =  mysql_query("SELECT Portfolio,program,Agency,Acronym from bud
  $num_rows = mysql_num_rows($agency_results);
  ($rows = mysql_num_rows($agency_results));
   
-echo "<h5>There is a total of ".$num_rows." Agencies with ".$scheme." in their name.</h5>";
+echo "<h5>There is a total of ".$num_rows." Schemes with ".$scheme." in their name.</h5>";
 for ($j = 0 ; $j < $rows ; ++$j)
 echo 
 "<table class='results'>
