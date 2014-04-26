@@ -51,7 +51,7 @@ $budget_year = $_GET['budget_year'];
 }
 if(!isset($_GET['agency']))
   {
-$agencies_all = mysql_query("SELECT last,sum(last),current,sum(current),agency,source,url,acronym from budget_table GROUP BY AGENCY ");//creates list of all agencies which provide clickable links that trigger results for that agency
+$agencies_all = mysql_query("SELECT last,sum(last),current,sum(current),agency,source,url,acronym from budget_table GROUP BY AGENCY ORDER BY SUM(CURRENT)-SUM(LAST) ");//creates list of all agencies which provide clickable links that trigger results for that agency
  $num_rows = mysql_num_rows($agencies_all);
  ($rows = mysql_num_rows($agencies_all));
      
