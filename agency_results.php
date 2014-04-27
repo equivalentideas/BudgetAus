@@ -212,11 +212,11 @@ FROM budget_table2 WHERE MATCH(Agency,acronym) AGAINST('$agency' IN BOOLEAN MODE
  echo
    "<table class='results'>
    <tr><td class='left'>Agency</td>
-<td><a href='agency_results.php?agency=%22".mysql_result($results_current,$j, 'Agency')."%22'   title='Find all Agency results for ".mysql_result($results_current,$j, 'Agency')." 'target='_blank' '>".mysql_result($results_current,$j, 'Agency')."</a>
+<td><a href='agency_results.php?agency=%22".mysql_result($results_current,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($results_current,$j, 'Agency')." 'target='_blank' '>".mysql_result($results_current,$j, 'Agency')."</a>
 </td></tr>
 <tr>
 <td width='30px'>Program</td>
-<td><a href='program_results.php?program=%22".mysql_result($results_current,$j, 'Program')."%22'   title='Find all Scheme results for ".mysql_result($results_current,$j, 'Program')." 'target='_blank' '>".mysql_result($results_current,$j, 'Program')."</a>
+<td><a href='program_results.php?program=%22".mysql_result($results_current,$j, 'Program')."%22&budget_year=current'   title='Find all Scheme results for ".mysql_result($results_current,$j, 'Program')." 'target='_blank' '>".mysql_result($results_current,$j, 'Program')."</a>
 </td></tr>  
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($results_current,$j, 'sum(last)')).",000  </TD></tr><tr>
@@ -276,7 +276,7 @@ echo
 <tr>
 
 
-<td><a href='agency_results.php?agency=".mysql_result($agency_results,$j, 'Agency')."'  target='_blank' title='Agency Results for ".mysql_result($agency_results,$j, 'Agency')." - opens in new window'>".mysql_result($agency_results,$j, 'Agency')." - 
+<td><a href='agency_results.php?agency=%22".mysql_result($agency_results,$j, 'Agency')."%22&budget_year=current'  target='_blank' title='Agency Results for ".mysql_result($agency_results,$j, 'Agency')." - opens in new window'>".mysql_result($agency_results,$j, 'Agency')." - 
 ".mysql_result($agency_results,$j, 'Acronym')."</a></td>
 
 </tr></table>";
@@ -295,7 +295,7 @@ echo
 <tr>
 
 <td>
-<a href='program_results.php?program=%22".mysql_result($agency_results,$j, 'Program')."%22'  target='_blank' title='Find Program Results for ".mysql_result($agency_results,$j, 'Program')." - opens in new window'>".mysql_result($agency_results,$j, 'Program')."</a></td>
+<a href='program_results.php?program=%22".mysql_result($agency_results,$j, 'Program')."%22&budget_year=current'  target='_blank' title='Find Program Results for ".mysql_result($agency_results,$j, 'Program')." - opens in new window'>".mysql_result($agency_results,$j, 'Program')."</a></td>
 </tr>
 </table>";
 //////////////////////////////////////////////////////////////////
@@ -311,12 +311,12 @@ for ($j = 0 ; $j < $rows ; ++$j)
 echo 
 "<div class='content'>
 <h4>
-<a href='agency_results.php?agency=%22".mysql_result($scheme_results,$j, 'agency')."%22&submit=Show'  target='_blank' title='Agency Results for ".mysql_result($scheme_results,$j, 'agency')."'>".mysql_result($scheme_results,$j, 'agency')."</a>
+<a href='agency_results.php?agency=%22".mysql_result($scheme_results,$j, 'agency')."%22&budget_year=current'  target='_blank' title='Agency Results for ".mysql_result($scheme_results,$j, 'agency')."'>".mysql_result($scheme_results,$j, 'agency')."</a>
 </h4>
 <p>
-<a href='program_results.php?program=%22".mysql_result($scheme_results,$j, 'Program')."%22&submit=Show'  target='_blank' title='Program Results for ".mysql_result($scheme_results,$j, 'Program')."'>".mysql_result($scheme_results,$j, 'Program')."</a>
+<a href='program_results.php?program=%22".mysql_result($scheme_results,$j, 'Program')."%22&budget_year=current'  target='_blank' title='Program Results for ".mysql_result($scheme_results,$j, 'Program')."'>".mysql_result($scheme_results,$j, 'Program')."</a>
 </p>
-<p><a href='scheme_results.php?scheme=%22".mysql_result($scheme_results,$j, 'Component')."%22&submit=Show'  target='_blank' title='Scheme Results for ".mysql_result($scheme_results,$j, 'Component')."'>".mysql_result($scheme_results,$j, 'Component')."</a>
+<p><a href='scheme_results.php?scheme=%22".mysql_result($scheme_results,$j, 'Component')."%22&budget_year=current'  target='_blank' title='Scheme Results for ".mysql_result($scheme_results,$j, 'Component')."'>".mysql_result($scheme_results,$j, 'Component')."</a>
 </p>
 </div>";
 }
@@ -343,11 +343,11 @@ for ($j = 0 ; $j < $rows ; ++$j)
  echo
    "<table class='results'>
    <tr><td class='left'>Agency</td>
-<td><a href='agency_results.php?agency=%22".mysql_result($result,$j, 'Agency')."%22'   title='Find all Agency results for ".mysql_result($result,$j, 'Agency')." 'target='_blank' '>".mysql_result($result,$j, 'Agency')."</a>
+<td><a href='agency_results.php?agency=%22".mysql_result($result,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($result,$j, 'Agency')." 'target='_blank' '>".mysql_result($result,$j, 'Agency')."</a>
 </td></tr>
 <tr>
 <td width='30px'>Program</td>
-<td><a href='program_results.php?program=%22".mysql_result($result,$j, 'Program')."%22'   title='Find all Scheme results for ".mysql_result($result,$j, 'Program')." 'target='_blank' '>".mysql_result($result,$j, 'Program')."</a>
+<td><a href='program_results.php?program=%22".mysql_result($result,$j, 'Program')."%22&budget_year=current'   title='Find all Scheme results for ".mysql_result($result,$j, 'Program')." 'target='_blank' '>".mysql_result($result,$j, 'Program')."</a>
 </td></tr>  
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>
@@ -380,11 +380,11 @@ FROM budget_table WHERE MATCH(Agency,acronym) AGAINST('$agency' IN BOOLEAN MODE)
  echo
    "<table class='results'>
    <tr><td class='left'>Agency</td>
-<td><a href='agency_results.php?agency=%22".mysql_result($results,$j, 'Agency')."%22'   title='Find all Agency results for ".mysql_result($results,$j, 'Agency')." 'target='_blank' '>".mysql_result($results,$j, 'Agency')."</a>
+<td><a href='agency_results.php?agency=%22".mysql_result($results,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($results,$j, 'Agency')." 'target='_blank' '>".mysql_result($results,$j, 'Agency')."</a>
 </td></tr>
 <tr>
 <td width='30px'>Program</td>
-<td><a href='program_results.php?program=%22".mysql_result($results,$j, 'Program')."%22'   title='Find all Scheme results for ".mysql_result($results,$j, 'Program')." 'target='_blank' '>".mysql_result($results,$j, 'Program')."</a>
+<td><a href='program_results.php?program=%22".mysql_result($results,$j, 'Program')."%22&budget_year=current'   title='Find all Scheme results for ".mysql_result($results,$j, 'Program')." 'target='_blank' '>".mysql_result($results,$j, 'Program')."</a>
 </td></tr>  
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(last)')).",000  </TD></tr><tr>

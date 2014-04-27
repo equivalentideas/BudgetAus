@@ -1,13 +1,5 @@
 <?php
-$scheme = mysqli_real_escape_string($scheme);
-$ps = mysqli_real_escape_string($ps);
-$program = mysqli_real_escape_string($program);
-$agency = mysqli_real_escape_string($agency);
-$portfolio = mysqli_real_escape_string($portfolio);
-$search_term = mysqli_real_escape_string($search_term);
-$search_term_non = mysqli_real_escape_string($search_term_non);
-$objective = mysqli_real_escape_string($objective );
-$objectives = mysqli_real_escape_string($objectives);
+
 echo
 "<hr>
 <div id='footer'> 

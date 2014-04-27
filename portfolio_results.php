@@ -40,7 +40,7 @@ ECHO
 "<TABLE clas='two'>
 <TR>
 <TD>
-<a href='agency_results.php?agency=%22".mysql_result($results,$j, 'agency')."%22' target='_blank' title='Get Programs for this agency in new window'>".mysql_result($results,$j, 'agency')."</a>
+<a href='agency_results.php?agency=%22".mysql_result($results,$j, 'agency')."%22&budget_year=current'' target='_blank' title='Get Programs for this agency in new window'>".mysql_result($results,$j, 'agency')."</a>
 </TD></TR>
 <TD class='money'>
 <span class='inlinesparkline'>".mysql_result($results,$j, 'sum(last)')."000,".mysql_result($results,$j, 'sum(current)')."000,".mysql_result($results,$j, 'sum(plus1)')."000,".mysql_result($results,$j, 'sum(plus2)')."000,".mysql_result($results,$j, 'sum(plus3)')."000   </span>
@@ -77,7 +77,12 @@ $portfolio = $_GET['portfolio'];
 include('scripts/totals.php');//includes script that calculates totals of all spending for last and current budget years.
 
  
-
+$total_current = mysql_query("SELECT CURRENT,SUM(CURRENT) FROM budget_table2 ");
+   $num_rows = mysql_num_rows($total_current);
+($rows = mysql_num_rows($total_current));
+for ($j = 0 ; $j < $rows ; ++$j)
+$total_current = "".mysql_result($total_current,$j, 'SUM(current)')."";//assigns this value to a variable.
+/////////////////////////////////////////////////
 $query_total_last = mysql_query("SELECT last,sum(last) from `budget_table2` 
 WHERE MATCH(Portfolio) AGAINST('%22".$portfolio."%22'IN BOOLEAN MODE)  ");//calculates total spend for portfolio based on url triggered by user for last budget year
 $num_rows = mysql_num_rows($query_total_last);
@@ -94,7 +99,9 @@ for ($j = 0 ; $j < $rows ; ++$j)
 $query_total_current_year = "".mysql_result($query_total_current,$j, 'SUM(current)')."";//assigns the value to variable
 
 //////////////////////////////////////////////////////////////////////////////////////////
-include('scripts/percent.php');//see documentation in included file
+$percent = (($query_total_current_year/$total_current)*100);//$percent variable is used in tax_totals.php and the Flot pie graph
+//////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 $billion_ = mysql_query("SELECT current,sum(current) from `budget_table2` 
@@ -135,7 +142,7 @@ for ($j = 0 ; $j < $rows ; ++$j)
 <tr>
 <td class='left'>Agency</td>
 <td class='right'>
-<a href='agency_results.php?agency=%22".mysql_result($result,$j, 'agency')."%22' target='_blank' title='Get Programs for this Agency in new window'>".mysql_result($result,$j, 'agency')."</a></TD></TR>
+<a href='agency_results.php?agency=%22".mysql_result($result,$j, 'agency')."%22&budget_year=current' target='_blank' title='Get Programs for this Agency in new window'>".mysql_result($result,$j, 'agency')."</a></TD></TR>
    
 <TR>
 <td>2012/13</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>

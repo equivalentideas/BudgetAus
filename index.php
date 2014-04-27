@@ -296,16 +296,6 @@ $num_rows = mysql_num_rows($total_payments_current);
 <div id="accordion" role="main">
 <div class='content'>
 
-	
-
-
-
-   
-
-
-
-
-
 	<?PHP
 	//ini_set('display_errors', 0);
 
