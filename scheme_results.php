@@ -44,7 +44,7 @@ $scheme = $_GET['scheme'];
 {
 $budget_year = $_GET['budget_year']; 
 }
-//$scheme = mysqli_real_escape_string($scheme);
+$scheme = mysql_real_escape_string($scheme);
 $scheme = trim($scheme);
 
    if ($budget_year =='current')

@@ -27,7 +27,7 @@ $agencies = mysql_query("SELECT AGENCY from budget_table GROUP BY AGENCY ");//cr
           for ($j = 0 ; $j < $rows ; ++$j)
 		  
 		  echo
-		  "<p><a href='estimated_v_actual.php?agency=%22".mysql_result($agencies, $j, 'agency')."%22'>".mysql_result($agencies, $j, 'agency')."</a></p>";//html output for above query
+		  "<p><a href='estimated_v_actual.php?agency=".mysql_result($agencies, $j, 'agency')."'>".mysql_result($agencies, $j, 'agency')."</a></p>";//html output for above query
 ?>
  
 
@@ -39,6 +39,14 @@ $agencies = mysql_query("SELECT AGENCY from budget_table GROUP BY AGENCY ");//cr
 	 
 	
 <div class="three">
+
+
+
+
+
+
+
+
 <?php
 include('scripts/db.php');
 
@@ -49,101 +57,12 @@ $agency = $_GET['agency'];
 {
 $budget_year = $_GET['budget_year']; 
 }
-if(!isset($_GET['agency']))
+$agency=mysql_real_escape_string($agency);
+if(isset($_GET['agency']))
 {
 
-$agencies_current =  mysql_query("SELECT Portfolio,Program,Agency,Acronym,last,sum(last),current,sum(current),source,url 
-FROM budget_table2  GROUP BY Agency ");
-       
- $num_rows = mysql_num_rows($agencies_current);
 
-   ($rows = mysql_num_rows($agencies_current));
-     
-          for ($j = 0 ; $j < $rows ; ++$j)
-		  
- $agencies_all = mysql_query("SELECT last,sum(last),current,sum(current),agency,source,url,acronym from budget_table GROUP BY AGENCY order by $difference_array DESC ");
- //creates list of all agencies which provide clickable links that trigger results for that agency
- $num_rows = mysql_num_rows($agencies_all);
- ($rows = mysql_num_rows($agencies_all));
-     
-          for ($j = 0 ; $j < $rows ; ++$j)
-$difference_array= mysql_query(".mysql_result($agencies_all, $j, 'sum(last)') - mysql_result($agencies_all, $j, 'sum(current)').");
-
-		  echo
-		  "<table class='results'>
-
-<tr><td class='left'>Agency</td>
-<td><a href='agency_results.php?agency=%22".mysql_result($agencies_all,$j, 'Agency')."%22&budet_year=current'   title='Find all Agency results for ".mysql_result($agencies_all,$j, 'Agency')." 'target='_blank' '>".mysql_result($agencies_all,$j, 'Agency')."</a> (".mysql_result($agencies_all,$j, 'ACRONYM').")
-</td></tr>
-      <TR>
-
-<td><a href='".mysql_result($agencies_all,$j, 'URL')." target='_blank' title='Opens in new window''>Estimated</a>
-<TD class='money'>
-$".number_format(mysql_result($agencies_all, $j, 'sum(current)')).",000  </TD>
-</tr>
-<td><a href='".mysql_result($agencies_all,$j, 'URL')." target='_blank' title='Opens in new window''>Actual</a><TD class='money'>
-$".number_format(mysql_result($agencies_all, $j, 'sum(last)')).",000</TD>
-</tr>
-<tr>
-<td>Difference</td><td class='money'>$".number_format(mysql_result($agencies_all, $j, 'sum(last)') - mysql_result($agencies_all, $j, 'sum(current)')).",000</td>
-</tr>
-</table>";//html output for above query   
-    }
-elseif(isset($_GET['agency']))
-//////////////////////////////////////////////////////////////////////////////////////
-
-
-
- $result_last =  mysql_query("SELECT Portfolio,Program,Agency,Acronym,last,sum(last),current,sum(current),source,url
-FROM budget_table  WHERE MATCH(Agency,Acronym) AGAINST('$agency' IN BOOLEAN MODE) GROUP BY Agency ");
-// this query asks for the total for the current year from the LAST BUDGET YEAR DATA for the agencies matching the user search term. This value for the last budget year data will be the ESTIMATED cost. This search is BOOLEAN.
-      
-
- $num_rows = mysql_num_rows($result_last);
- ($rows = mysql_num_rows($result_last));
  
-  
-          for ($j = 0 ; $j < $rows ; ++$j)
-	   
-$result_current =  mysql_query("SELECT Portfolio,Program,Agency,Acronym,last,sum(last),current,sum(current),source,url 
-FROM budget_table2  WHERE MATCH(Agency,Acronym) AGAINST('$agency' IN BOOLEAN MODE) GROUP BY Agency ");
-//this query asks for the total for the agencies matching the user input search term from the CURRENT BUDGET YEAR DATA for the column relating to 'last' year. This is going to be the ACTUAL spend as these are the REVISED figures for what was ESTIMATED in last year's budget data. With the value from this query and the one above, these two values can be compared and a difference calculated between ESTIMATED and ACTUAL spend for agencies that match the search term. This search is BOOLEAN. 
-       
- $num_rows = mysql_num_rows($result_current);
-
-   ($rows = mysql_num_rows($result_current));
-     
-          for ($j = 0 ; $j < $rows ; ++$j)
-		 if ($num_rows >0)
-		  
-          echo
-		  
-   "
-   
-   <table class='results'>
-
-<tr><td class='left'>Agency</td>
-<td><a href='agency_results.php?agency=%22".mysql_result($result_current,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($result_current,$j, 'Agency')." 'target='_blank' '>".mysql_result($result_current,$j, 'Agency')."</a> (".mysql_result($result_current,$j, 'ACRONYM').")
-</td></tr>
-      <TR>
-
-<td><a href='".mysql_result($result_last,$j, 'URL')."' target='_blank' title='Opens in new window'>Estimated</a><TD class='money'>
-$".number_format(mysql_result($result_last, $j, 'sum(current)')).",000  </TD>
-</tr>
-<tr>
-<td><a href='".mysql_result($result_current,$j, 'URL')."' target='_blank' title='Opens in new window'>Actual</a><TD class='money'>
-$".number_format(mysql_result($result_current, $j, 'sum(last)')).",000  </TD>
-</tr>
-
-<tr>
-<td>Difference</td><td class='money'>$".number_format(mysql_result($result_current, $j, 'sum(last)') - mysql_result($result_last, $j, 'sum(current)')).",000</td>
-</tr>
-</table>";
-//////////////////////////////////////////////////////////////////////////////////////  
-        
-		
-elseif($num_rows==0)
-
  $result_last_non_boolean =  mysql_query("SELECT Agency,Acronym,last,sum(last),current,sum(current),source,url
 FROM budget_table  WHERE (Agency) LIKE('%$agency%') GROUP BY Agency ");
 // this query asks for the total for the current year from the LAST BUDGET YEAR DATA for the agencies matching the user search term. This value for the last budget year data will be the ESTIMATED cost. This search is NON BOOLEAN.
@@ -155,7 +74,7 @@ FROM budget_table  WHERE (Agency) LIKE('%$agency%') GROUP BY Agency ");
           for ($j = 0 ; $j < $rows ; ++$j)
 	 
 $result_current_non_boolean =  mysql_query("SELECT Portfolio,Program,Agency,Acronym,last,sum(last),current,sum(current),source,url 
-FROM budget_table2  WHERE (Agency) LIKE('%$agency%') GROUP BY Agency ");
+FROM budget_table2  WHERE (Agency) LIKE('%$agency%')  &&  NOT('%Workplace Gender Equality Agency%') GROUP BY Agency ");
 //this query asks for the total for the agencies matching the user input search term from the CURRENT BUDGET YEAR DATA for the column relating to 'last' year. This is going to be the ACTUAL spend as these are the REVISED figures for what was ESTIMATED in last year's budget data. With the value from this query and the one above, these two values can be compared and a difference calculated between ESTIMATED and ACTUAL spend for agencies that match the search term. This search is NON BOOLEAN.
        
 
@@ -166,15 +85,11 @@ FROM budget_table2  WHERE (Agency) LIKE('%$agency%') GROUP BY Agency ");
           for ($j = 0 ; $j < $rows ; ++$j)
 		  
           echo
-   "   
-   
-   <table class='results'>
-
+"<table class='results'>
 <tr><td class='left'>Agency</td>
 <td><a href='agency_results.php?agency=%22".mysql_result($result_current_non_boolean,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($result_current_non_boolean,$j, 'Agency')." 'target='_blank' '>".mysql_result($result_current_non_boolean,$j, 'Agency')."</a> (".mysql_result($result_current_non_boolean,$j, 'ACRONYM').")
 </td></tr>
-      <TR>
-
+<TR>
 <td>Estimated<TD class='money'><a href=" .mysql_result($result_last_non_boolean,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($result_last_non_boolean,$j, 'Source')."</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 $".number_format(mysql_result($result_last_non_boolean, $j, 'sum(current)')).",000  </TD>
 </tr>
@@ -187,7 +102,7 @@ $".number_format(mysql_result($result_current_non_boolean, $j, 'sum(last)')).",0
 </table>";
 //////////////////////////////////////////////////////////////////////////////////////  
 
-	
+	}
 		
 ?>
 

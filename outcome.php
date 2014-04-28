@@ -1,11 +1,24 @@
 <?php include('scripts/header.php');?>     
  <div id="right" role="complimentary">  
 
-
-
-
+<?php 
  
+include('scripts/db.php');
+if (mysql_select_db($db_database))
 
+$all = mysql_query("SELECT Portfolio,outcome,current,sum(last),sum(current),source,url
+FROM budget_table2 GROUP BY portfolio,outcome   ");
+$num_rows = mysql_num_rows($all);
+
+($rows = mysql_num_rows($all));
+for ($j = 0 ; $j < $rows ; ++$j)
+
+{
+echo
+"<p><a href='portfolio_results.php?portfolio=%22".mysql_result($all,$j, 'Portfolio')."%22' target='_blank'  title='Find all Programs for ".mysql_result($all,$j, 'Portfolio')." - opens in new window'>".mysql_result($all,$j, 'Portfolio')."</a> | ".mysql_result($all,$j, 'outcome')." |
+".mysql_result($all,$j, 'sum(current)')." | <a href=" .mysql_result($all,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($all,$j, 'Source')."</a></p>";
+ }
+?>
       </div>
    
 	<div id="left" role="main">
@@ -14,7 +27,7 @@
 
 	<h3>Search by Outcome Number</h3>
 		
-	<form action='search_by_outcome.php'  method="GET">
+	<form action='outcome.php'  method="GET">
 
 	<div role="form">
 		   
@@ -41,6 +54,7 @@
  <option value="Veterans Affairs">Veterans Affairs</option>
 </select>
 <select name='outcome'>
+<option value=""></option>
 <option value="1">1</option>
 <option value="2">2</option>
 <option value="3">3</option>
@@ -70,8 +84,11 @@ $outcome = $_GET['outcome'];
 $portfolio  = $_GET['portfolio'];
 
 }
-
+$outcome = mysql_real_escape_string($outcome);
+$portfolio = mysql_real_escape_string($portfolio);
+if(isset($_GET['portfolio']) && isset($_GET['outcome']));
 //takes user input via form and selects results from budget table for current year based on portfolio and outcome number. Output is summed/grouped by Outcome
+
 $total = mysql_query("SELECT Portfolio,Agency,Program,Component,outcome,last,current,plus1,plus2,plus3,sum(last),sum(current),sum(plus1),sum(plus2),sum(plus3) 
 FROM budget_table2 WHERE PORTFOLIO LIKE('%$portfolio%') && outcome LIKE('%$outcome%') GROUP BY outcome   ");
 $num_rows = mysql_num_rows($total);
@@ -94,20 +111,17 @@ for ($j = 0 ; $j < $rows ; ++$j)
 echo
 "  
 <TR>
-
-
  <td>
  <a href='agency_results.php?agency=%22".mysql_result($result,$j, 'Agency')."%22' target='_blank'
  title='Find all results for ".mysql_result($result,$j, 'Agency')." - opens in new window'>".mysql_result($result,$j, 'Agency')."</a></TD>
 <TD class='money'>
 $".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>
-
 ";
 }echo
 "</table>";
-
+/*
 $result2 = mysql_query("SELECT Portfolio,Agency,Program,Component,outcome,last,current,plus1,plus2,plus3,sum(last),sum(current),sum(plus1),sum(plus2),sum(plus3),source,URL
-FROM budget_table2 WHERE PORTFOLIO LIKE('%$portfolio%') && outcome LIKE('%$outcome%') GROUP BY program ");//Output is summed by program and outcome for selected portfolio
+FROM budget_table2 WHERE PORTFOLIO LIKE('%$portfolio%') && outcome LIKE('%$outcome%') GROUP BY program ");
 $num_rows = mysql_num_rows($result2);
 echo "<h3>Outcome ".$outcome." in the ".$portfolio." Portfolio has ".$num_rows." Programs </h3>";
 ($rows = mysql_num_rows($result2));
@@ -130,12 +144,12 @@ for ($j = 0 ; $j < $rows ; ++$j)
 <TD class='money'>13/14 total<br>$".number_format(mysql_result($result2,$j, 'sum(current)')).",000  </TD></tr><tr>
 
 </TABLE><p></p>";
-
 	
 }
-
+*/
+/*
 $result3 = mysql_query("SELECT Portfolio,Agency,Program,Component,outcome,last,current,plus1,plus2,plus3,source,URL
-FROM budget_table2 WHERE PORTFOLIO LIKE('%$portfolio%') && outcome LIKE('%$outcome%') ");//output is summed by outcome at program component level
+FROM budget_table2 WHERE PORTFOLIO LIKE('%$portfolio%') && outcome LIKE('%$outcome%') ");
 $num_rows = mysql_num_rows($result3);
 echo "<h3>Outcome ".$outcome." in the ".$portfolio." Portfolio has ".$num_rows." schemes </h3>";
 ($rows = mysql_num_rows($result3));
@@ -158,33 +172,20 @@ for ($j = 0 ; $j < $rows ; ++$j)
   </TD></tr><tr>
 
 <td>Scheme</td>
-
-
 <td class='id'><a href='scheme_results.php?scheme=%22".mysql_result($result3,$j, 'Objective')."%22' target='_blank' 
 title=' Get totals for ".mysql_result($result3,$j, 'Component')." - opens in new window'>".mysql_result($result3,$j, 'Component')."</a></TD>
-
 </TR>
-
-
-
-
 <TR>
-
-
 <td>2013/14</td><TD class='money'>$".number_format(mysql_result($result3,$j, 'current')).",000  </TD></tr><tr>
-
 <TR>
 <TD> Source</td> 
-
 <td class='source'><a href=" .mysql_result($result3,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($result3,$j, 'Source')."</a> </TD>
-
-
 </TR>
 </TABLE><p></p>";
 
 	
 }
-
+*/
 	?>
 		
 

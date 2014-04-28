@@ -44,7 +44,7 @@ $program = $_GET['program'];
 {
 $budget_year = $_GET['budget_year']; 
 }
-
+$program=mysql_real_escape_string($program);
    if ($budget_year =='current')
    {
 $total_current = mysql_query("SELECT CURRENT,SUM(CURRENT) FROM budget_table2 ");

@@ -44,6 +44,7 @@ $agency = $_GET['agency'];
 {
 $budget_year = $_GET['budget_year']; 
 }
+$agency=mysql_real_escape_string($agency);
 
    if ($budget_year =='current')
    {
@@ -232,6 +233,8 @@ FROM budget_table2 WHERE MATCH(Agency,acronym) AGAINST('$agency' IN BOOLEAN MODE
 
 </TR>
 </table>";
+
+
 
 }
 //////////////////////////////////////////////////////////////////////////////////////
