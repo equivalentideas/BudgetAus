@@ -106,6 +106,59 @@ $".number_format(mysql_result($result_current_non_boolean, $j, 'sum(last)')).",0
 		
 ?>
 
+<?php
+include('scripts/db.php');
+
+if (mysql_select_db($db_database))
+{
+$agency = $_GET['agency']; 
+}
+
+if(!isset($_GET['agency']))
+{
+
+$all_agencies = mysql_query("Select distinct BI.Agency, BA.B2Last, BA.B2Current, BB.B1last, BB.B1Current from
+(Select distinct BU.Agency from
+((select B2.Agency
+from budget_table2 as B2
+group by Agency) union distinct (
+select B1.Agency
+from budget_table1 as B1
+group by B1.Agency) 
+) as BU) BI left join 
+(select B2.Agency, sum(B2.last) B2last, sum(B2.current) B2Current
+from budget_table2 as B2
+group by Agency) BA on BI.Agency = BA.Agency
+left join 
+(select B1.Agency, sum(B1.last) B1Last, sum(B1.current) B1Current
+from budget_table1 B1
+group by B1.Agency) BB on BI.Agency = BB.Agency");
+
+ $num_rows = mysql_num_rows($all_agencies);
+
+   ($rows = mysql_num_rows($all_agencies));
+     
+          for ($j = 0 ; $j < $rows ; ++$j)
+		  
+          echo
+"<table class='results'>
+<tr><td class='left'>Agency</td>
+<td><a href='agency_results.php?agency=%22".mysql_result($all_agencies,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($all_agencies,$j, 'Agency')." 'target='_blank' '>".mysql_result($all_agencies,$j, 'Agency')."</a> (".mysql_result($all_agencies,$j, 'ACRONYM').")
+</td></tr>
+<TR>
+<td>Estimated<TD class='money'><a href=" .mysql_result($all_agencies,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($all_agencies,$j, 'Source')."</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$".number_format(mysql_result($all_agencies, $j, 'sum(B1current)')).",000  </TD>
+</tr>
+<td>Actual<TD class='money'><a href=" .mysql_result($all_agencies,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($all_agencies,$j, 'Source')."</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$".number_format(mysql_result($all_agencies, $j, 'sum(B2last)')).",000</TD>
+</tr>
+<tr>
+<td>Difference</td><td class='money'>$".number_format(mysql_result($all_agencies, $j, 'sum(B2last)') - mysql_result($all_agencies, $j, 'sum(B1current)')).",000</td>
+</tr>
+</table>";
+}
+?>
+
 </div>
  
 
