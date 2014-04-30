@@ -1,3 +1,4 @@
+
 <?php include('scripts/header.php');?>      
 <div id="blog" role="complimentary">
  <div class="featured"> 
@@ -47,7 +48,6 @@ $agencies = mysql_query("SELECT AGENCY from budget_table GROUP BY AGENCY ");//cr
 
 
 
-
 <?php
 include('scripts/db.php');
 
@@ -55,37 +55,56 @@ if (mysql_select_db($db_database))
 {
 $agency = $_GET['agency']; 
 }
+{
+$budget_year = $_GET['budget_year']; 
+}
+$agency=mysql_real_escape_string($agency);
+if(isset($_GET['agency']))
+{
 
 
+ 
+ $result_last_non_boolean =  mysql_query("SELECT Agency,Acronym,last,sum(last),current,sum(current),source,url
+FROM budget_table  WHERE (Agency) LIKE('%$agency%') GROUP BY Agency ");
+// this query asks for the total for the current year from the LAST BUDGET YEAR DATA for the agencies matching the user search term. This value for the last budget year data will be the ESTIMATED cost. This search is NON BOOLEAN.
+      
 
-$row = mysql_query("SELECT * from agencies");
-
- $num_rows = mysql_num_rows($row);
-
-   ($rows = mysql_num_rows($row));
+ $num_rows = mysql_num_rows($result_last_non_boolean);
+ ($rows = mysql_num_rows($result_last_non_boolean));
      
           for ($j = 0 ; $j < $rows ; ++$j)
-		  
-{
+	 
+$result_current_non_boolean =  mysql_query("SELECT Portfolio,Program,Agency,Acronym,last,sum(last),current,sum(current),source,url 
+FROM budget_table2  WHERE (Agency) LIKE('%$agency%')  &&  NOT('%Workplace Gender Equality Agency%') GROUP BY Agency ");
+//this query asks for the total for the agencies matching the user input search term from the CURRENT BUDGET YEAR DATA for the column relating to 'last' year. This is going to be the ACTUAL spend as these are the REVISED figures for what was ESTIMATED in last year's budget data. With the value from this query and the one above, these two values can be compared and a difference calculated between ESTIMATED and ACTUAL spend for agencies that match the search term. This search is NON BOOLEAN.
+       
+
+ $num_rows = mysql_num_rows($result_current_non_boolean);
+
+   ($rows = mysql_num_rows($result_current_non_boolean));
+     
+          for ($j = 0 ; $j < $rows ; ++$j)
 		  
           echo
 "<table class='results'>
 <tr><td class='left'>Agency</td>
-<td><a href='agency_results.php?agency=%22".mysql_result($row,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($row,$j, 'Agency')." 'target='_blank' '>".mysql_result($row,$j, 'Agency')."</a> 
+<td><a href='agency_results.php?agency=%22".mysql_result($result_current_non_boolean,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($result_current_non_boolean,$j, 'Agency')." 'target='_blank' '>".mysql_result($result_current_non_boolean,$j, 'Agency')."</a> (".mysql_result($result_current_non_boolean,$j, 'ACRONYM').")
 </td></tr>
 <TR>
-<td>Estimated<TD class='money'>
-$".number_format(mysql_result($row, $j, 'Budget_year_one_current')).",000  </TD>
+<td>Estimated<TD class='money'><a href=" .mysql_result($result_last_non_boolean,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($result_last_non_boolean,$j, 'Source')."</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$".number_format(mysql_result($result_last_non_boolean, $j, 'sum(current)')).",000  </TD>
 </tr>
-<td>Actual<TD class='money'>
-$".number_format(mysql_result($row, $j, 'Budget_year_two_last')).",000</TD>
+<td>Actual<TD class='money'><a href=" .mysql_result($result_current_non_boolean,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($result_current_non_boolean,$j, 'Source')."</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$".number_format(mysql_result($result_current_non_boolean, $j, 'sum(last)')).",000</TD>
 </tr>
 <tr>
-<td>Difference</td><td class='money'>$".number_format(mysql_result($row, $j, 'Budget_year_two_last') - mysql_result($row, $j, 'Budget_year_one_current')).",000</td>
+<td>Difference</td><td class='money'>$".number_format(mysql_result($result_current_non_boolean, $j, 'sum(last)') - mysql_result($result_last_non_boolean, $j, 'sum(current)')).",000</td>
 </tr>
 </table>";
-}
+//////////////////////////////////////////////////////////////////////////////////////  
 
+	}
+		
 ?>
 
 </div>
