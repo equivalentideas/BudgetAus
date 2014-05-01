@@ -44,7 +44,7 @@ $scheme = $_GET['scheme'];
 {
 $budget_year = $_GET['budget_year']; 
 }
-$scheme = mysql_real_escape_string($scheme);
+//$scheme = mysql_real_escape_string($scheme);
 
 
    if ($budget_year =='current')
@@ -160,7 +160,7 @@ if ($num_rows>0)//triggers if there is a positive result on Boolean query
 {
         echo 
       
-"<h4>There are ".$num_rows." $scheme Schemes in current budget year data </h4>";
+"<h4>There are $num_rows Schemes matching $scheme in current budget year data </h4>";
         ($rows = mysql_num_rows($result));
      
           for ($j = 0 ; $j < $rows ; ++$j)
@@ -177,9 +177,9 @@ if ($num_rows>0)//triggers if there is a positive result on Boolean query
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>
 <td>Current</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>
-<td>Plus 1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
-<td>Plus 2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
-<td>Plus 3</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr><tr>
+<td>Next </td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
+<td>Next +1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr><tr>
 <td>Trend</td><TD class='money'>
 <span class='inlinesparkline'>".mysql_result($result,$j, 'sum(last)')."000,".mysql_result($result,$j, 'sum(current)')."000,".mysql_result($result,$j, 'sum(plus1)')."000,".mysql_result($result,$j, 'sum(plus2)')."000,".mysql_result($result,$j, 'sum(plus3)')."000   </span>
  </td></tr><TR>
@@ -298,7 +298,7 @@ $scheme_results =  mysql_query("SELECT Portfolio,Agency,Program,Component from b
  $num_rows = mysql_num_rows($scheme_results);
  ($rows = mysql_num_rows($scheme_results));
   
-echo "<h5>There is a total of ".$num_rows." Schemes with ".$scheme." in their name.</h5>
+echo "<h5>There is a total of ".$num_rows." Schemes matching $scheme .</h5>
 </a>";
 for ($j = 0 ; $j < $rows ; ++$j)
 echo 
@@ -327,7 +327,7 @@ FROM budget_table  WHERE MATCH(Program) AGAINST('$scheme'IN BOOLEAN MODE) ORDER 
     $num_rows = mysql_num_rows($result);
       echo 
       
-"<h4>There are ".$num_rows." $scheme Schemes in last budget year data </h4>";
+"<h4>There are ".$num_rows." Schemes matching $scheme in last budget year data </h4>";
     ($rows = mysql_num_rows($result));
 
 for ($j = 0 ; $j < $rows ; ++$j)

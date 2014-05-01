@@ -42,7 +42,7 @@ echo
 "<table>
    <tr>
     <td class='objective'>Program: 
-<a href='program_results.php?program=%22".mysql_result($objective_results,$j, 'Program')."%22&submit=Show'  target='_blank' title='Program Results for ".mysql_result($objective_results,$j, 'Program')."'>".mysql_result($objective_results,$j, 'Program')."</a> 
+<a href='program_results.php?program=%22".mysql_result($objective_results,$j, 'Program')."%22&budget_year=current'  target='_blank' title='Program Results for ".mysql_result($objective_results,$j, 'Program')."'>".mysql_result($objective_results,$j, 'Program')."</a> 
     </td>
    </tr>
    <tr>
@@ -124,7 +124,7 @@ echo
 "<table class='results'>
    <tr>
 
-    <td> <a href='portfolio_results.php?portfolio=%22".mysql_result($portfolio_results,$j, 'Portfolio')."%22'  target='_blank' title='Portfolio Results for ".mysql_result($portfolio_results,$j, 'Portfolio')." - opens in new window'>".mysql_result($portfolio_results,$j, 'Portfolio')."</a>
+    <td> <a href='portfolio_results.php?portfolio=%22".mysql_result($portfolio_results,$j, 'Portfolio')."%22&budget_year=current'  target='_blank' title='Portfolio Results for ".mysql_result($portfolio_results,$j, 'Portfolio')." - opens in new window'>".mysql_result($portfolio_results,$j, 'Portfolio')."</a>
     </td>
 
   </tr>
@@ -142,7 +142,7 @@ echo
 "<table>
   <tr>
    <td>
-<a href='agency_results.php?agency=%22".mysql_result($agency_results,$j, 'Agency')."%22&submit=Show'  target='_blank' title='Agency Results for ".mysql_result($agency_results,$j, 'Agency')." - opens in new window'>".mysql_result($agency_results,$j, 'Agency')." - 
+<a href='agency_results.php?agency=%22".mysql_result($agency_results,$j, 'Agency')."%22&budget_year=current'  target='_blank' title='Agency Results for ".mysql_result($agency_results,$j, 'Agency')." - opens in new window'>".mysql_result($agency_results,$j, 'Agency')." - 
 ".mysql_result($agency_results,$j, 'Acronym')."</a>
    </td>
   </tr>
@@ -159,7 +159,7 @@ for ($j = 0 ; $j < $rows ; ++$j)
 echo 
 "
     <p>
-<a href='program_results.php?program=%22".mysql_result($program_results,$j, 'Program')."%22&submit=Show'  target='_blank' title='Find Program Results for ".mysql_result($program_results,$j, 'Program')." - opens in new window'>".mysql_result($program_results,$j, 'Program')."</a>
+<a href='program_results.php?program=%22".mysql_result($program_results,$j, 'Program')."%22&budget_year=current'  target='_blank' title='Find Program Results for ".mysql_result($program_results,$j, 'Program')." - opens in new window'>".mysql_result($program_results,$j, 'Program')."</a>
     </p>
   ";
 //////////////////////////////////////////////////////////////////
@@ -174,7 +174,7 @@ for ($j = 0 ; $j < $rows ; ++$j)
 echo 
 "
  
-   <p><a href='scheme_results.php?scheme=%22".mysql_result($scheme_results,$j, 'Component')."%22&submit=Show'  target='_blank' title='Scheme Results for ".mysql_result($scheme_results,$j, 'Component')."'>".mysql_result($scheme_results,$j, 'Component')."</a>
+   <p><a href='scheme_results.php?scheme=%22".mysql_result($scheme_results,$j, 'Component')."%22&budget_year=current'  target='_blank' title='Scheme Results for ".mysql_result($scheme_results,$j, 'Component')."'>".mysql_result($scheme_results,$j, 'Component')."</a>
    </p>
 ";
 //////////////////////////////////////////////////////////////////

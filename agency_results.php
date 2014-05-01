@@ -168,7 +168,7 @@ if ($num_rows>0)//triggers if there is a positive result on Boolean query
 {
         echo 
       
-"<h4>There are ".$num_rows." $agency Agencies in current budget year data </h4>";
+"<h4>There are ".$num_rows." Agencies matching ".stripslashes($agency)." in current budget year </h4>";
         ($rows = mysql_num_rows($result));
      
           for ($j = 0 ; $j < $rows ; ++$j)
@@ -176,10 +176,10 @@ if ($num_rows>0)//triggers if there is a positive result on Boolean query
    "<table class='results'>
 <tr><td width='30px'>Portfolio</td>
 <td width='300px'>
-<a href='portfolio_results.php?portfolio=%22".mysql_result($result,$j, 'Portfolio')."%22'  target='_blank' title='Find all Portfolio results for ".mysql_result($result,$j, 'Portfolio')." - opens in new window'>".mysql_result($result,$j, 'Portfolio')."</a>
+<a href='portfolio_results.php?portfolio=%22".mysql_result($result,$j, 'Portfolio')."%22&budget_year=current'  target='_blank' title='Find all Portfolio results for ".mysql_result($result,$j, 'Portfolio')." - opens in new window'>".mysql_result($result,$j, 'Portfolio')."</a>
 </td></tr>
 <tr><td class='left'>Agency</td>
-<td><a href='agency_results.php?agency=%22".mysql_result($result,$j, 'Agency')."%22'   title='Find all Agency results for ".mysql_result($result,$j, 'Agency')." 'target='_blank' '>".mysql_result($result,$j, 'Agency')."</a>
+<td><a href='agency_results.php?agency=%22".mysql_result($result,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($result,$j, 'Agency')." 'target='_blank' '>".mysql_result($result,$j, 'Agency')."</a>
 </td></tr>
       
 <TR>
@@ -205,7 +205,7 @@ FROM budget_table2 WHERE MATCH(Agency,acronym) AGAINST('$agency' IN BOOLEAN MODE
 
     $num_rows = mysql_num_rows($results_current);
        ($rows = mysql_num_rows($results_current));
-	   echo "<h5>There is a total of ".$num_rows." Programs with ".$agency." in their name in the current budget year data.</h5>
+	   echo "<h5>There is a total of ".$num_rows." Programs matching ".stripslashes($agency)."  in their name in the current budget year data.</h5>
 </a>";
 	   for ($j = 0 ; $j < $rows ; ++$j)
 
@@ -242,18 +242,18 @@ FROM budget_table2 WHERE MATCH(Agency,acronym) AGAINST('$agency' IN BOOLEAN MODE
  elseif ($num_rows ==0)//triggers script below if there is no result on Boolean query. NULL result triggers NON BOOLEAN search across all fields 
  {
   echo
-  "<p>Sorry there are no Agency names containing the term ".$agency.". 
+  "<p>Sorry there are no Agency names containing the term ".stripslashes($agency)." 
   Check spelling or the results below or try a similar term.</p>";
   
 
 
 
-$portfolio_results =  mysql_query("SELECT Portfolio from budget_table2 WHERE Portfolio LIKE('%".$agency."%') Group by Portfolio ");
+$portfolio_results =  mysql_query("SELECT Portfolio from budget_table2 WHERE Portfolio LIKE('%$agency%') Group by Portfolio ");
 
  $num_rows = mysql_num_rows($portfolio_results);
  ($rows = mysql_num_rows($portfolio_results));
   
-echo "<h5>There is a total of ".$num_rows." Portfolios with ".$agency." in their name.</h5>";
+echo "<h5>There is a total of ".$num_rows." Portfolios matching ".stripslashes($agency)."</h5>";
 for ($j = 0 ; $j < $rows ; ++$j)
 echo 
 "<table class='results'>
@@ -272,7 +272,7 @@ $agency_results =  mysql_query("SELECT Portfolio,program,Agency,Acronym from bud
  $num_rows = mysql_num_rows($agency_results);
  ($rows = mysql_num_rows($agency_results));
   
-echo "<h5>There is a total of ".$num_rows." Agencies with ".$agency." in their name.</h5>";
+echo "<h5>There is a total of ".$num_rows." Agencies matching ".stripslashes($agency)."  </h5>";
 for ($j = 0 ; $j < $rows ; ++$j)
 echo 
 "<table class='results'>
@@ -290,7 +290,7 @@ $agency_results =  mysql_query("SELECT portfolio,agency,Program from budget_tabl
  $num_rows = mysql_num_rows($agency_results);
  ($rows = mysql_num_rows($agency_results));
   
-echo "<h5>There is a total of ".$num_rows." Programs with ".$agency." in their name.</h5>
+echo "<h5>There is a total of ".$num_rows." Programs matching ".stripslashes($agency)."  in the current budget year</h5>
 </a>";
 for ($j = 0 ; $j < $rows ; ++$j)
 echo 
@@ -308,7 +308,7 @@ $scheme_results =  mysql_query("SELECT Portfolio,Agency,Program,Component from b
  $num_rows = mysql_num_rows($scheme_results);
  ($rows = mysql_num_rows($scheme_results));
   
-echo "<h5>There is a total of ".$num_rows." Schemes with ".$agency." in their name.</h5>
+echo "<h5>There is a total of ".$num_rows." Schemes matching ".stripslashes($agency) ."</h5>
 </a>";
 for ($j = 0 ; $j < $rows ; ++$j)
 echo 
@@ -337,7 +337,7 @@ FROM budget_table  WHERE MATCH(Agency,Acronym) AGAINST('$agency'IN BOOLEAN MODE)
     $num_rows = mysql_num_rows($result);
       echo 
       
-"<h4>There are ".$num_rows." $agency Agencies in last budget year data </h4>";
+"<h4>There are ".$num_rows." Agencies matching ".stripslashes($agency) ."in last budget year </h4>";
     ($rows = mysql_num_rows($result));
 
 for ($j = 0 ; $j < $rows ; ++$j)
@@ -375,7 +375,7 @@ FROM budget_table WHERE MATCH(Agency,acronym) AGAINST('$agency' IN BOOLEAN MODE)
 
     $num_rows = mysql_num_rows($results);
        ($rows = mysql_num_rows($results));
-	   echo "<h5>There is a total of ".$num_rows." Programs with ".$agency." in their name in the last budget year data.</h5>
+	   echo "<h5>There is a total of ".$num_rows." Programs matching ".stripslashes($agency)." in the last budget year </h5>
 </a>";
 	   for ($j = 0 ; $j < $rows ; ++$j)
 
