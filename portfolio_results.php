@@ -110,7 +110,7 @@ $num_rows = mysql_num_rows($billion_);
 ($rows = mysql_num_rows($billion_));
 for ($j = 0 ; $j < $rows ; ++$j)
  $value = "".mysql_result($billion_,$j, 'SUM(current)')."";
- $billion = ($value/1000000); //divides this year's value by 1 million to express valuein billions
+ $billion = ($value/1000000); //divides this year's value by 1 million to express value in billions
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -145,11 +145,11 @@ for ($j = 0 ; $j < $rows ; ++$j)
 <a href='agency_results.php?agency=%22".mysql_result($result,$j, 'agency')."%22&budget_year=current' target='_blank' title='Get Programs for this Agency in new window'>".mysql_result($result,$j, 'agency')."</a></TD></TR>
    
 <TR>
-<td>2012/13</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>
-<td>2013/14</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>
-<td>2014/15</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
-<td>2015/16</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
-<td>2016/17</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr>
+<td>Last</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>
+<td>Current</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>
+<td>Next </td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
+<td>Next +1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr>
 <td>Trend</td><TD class='money'>
 <span class='inlinesparkline'>".mysql_result($result,$j, 'sum(last)')."000,".mysql_result($result,$j, 'sum(current)')."000,".mysql_result($result,$j, 'sum(plus1)')."000,".mysql_result($result,$j, 'sum(plus2)')."000,".mysql_result($result,$j, 'sum(plus3)')."000   </span>
  </td></tr>

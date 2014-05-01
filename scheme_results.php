@@ -214,9 +214,9 @@ FROM budget_table2 WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE)  ")
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($results_current,$j, 'sum(last)')).",000  </TD></tr><tr>
 <td>Current</td><TD class='money'>$".number_format(mysql_result($results_current,$j, 'sum(current)')).",000  </TD></tr><tr>
-<td>Plus 1</td><TD class='money'>$".number_format(mysql_result($results_current,$j, 'sum(plus1)')).",000  </td></tr><tr>
-<td>Plus 2</td><TD class='money'>$".number_format(mysql_result($results_current,$j, 'sum(plus2)')).",000  </td></tr><tr>
-<td>Plus 3</td><TD class='money'>$".number_format(mysql_result($results_current,$j, 'sum(plus3)')).",000  </td></tr><tr>
+<td>Next </td><TD class='money'>$".number_format(mysql_result($results_current,$j, 'sum(plus1)')).",000  </td></tr><tr>
+<td>Next +1</td><TD class='money'>$".number_format(mysql_result($results_current,$j, 'sum(plus2)')).",000  </td></tr><tr>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($results_current,$j, 'sum(plus3)')).",000  </td></tr><tr>
 <td>Trend</td><TD class='money'>
 <span class='inlinesparkline'>".mysql_result($results_current,$j, 'sum(last)')."000,".mysql_result($results_current,$j, 'sum(current)')."000,".mysql_result($results_current,$j, 'sum(plus1)')."000,".mysql_result($results_current,$j, 'sum(plus2)')."000,".mysql_result($results_current,$j, 'sum(plus3)')."000   </span>
  </td></tr><TR>
@@ -345,9 +345,9 @@ for ($j = 0 ; $j < $rows ; ++$j)
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>
 <td>Current</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>
-<td>Plus 1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
-<td>Plus 2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
-<td>Plus 3</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr><tr>
+<td>Next </td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
+<td>Next +1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr><tr>
 <td>Trend</td><TD class='money'>
 <span class='inlinesparkline'>".mysql_result($result,$j, 'sum(last)')."000,".mysql_result($result,$j, 'sum(current)')."000,".mysql_result($result,$j, 'sum(plus1)')."000,".mysql_result($result,$j, 'sum(plus2)')."000,".mysql_result($result,$j, 'sum(plus3)')."000   </span>
  </td></tr><TR>
@@ -382,9 +382,9 @@ FROM budget_table WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE)  ord
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(last)')).",000  </TD></tr><tr>
 <td>Current</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(current)')).",000  </TD></tr><tr>
-<td>Plus 1</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus1)')).",000  </td></tr><tr>
-<td>Plus 2</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus2)')).",000  </td></tr><tr>
-<td>Plus 3</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus3)')).",000  </td></tr><tr>
+<td>Next</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus1)')).",000  </td></tr><tr>
+<td>Next +1</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus2)')).",000  </td></tr><tr>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus3)')).",000  </td></tr><tr>
 <td>Trend</td><TD class='money'>
 <span class='inlinesparkline'>".mysql_result($results,$j, 'sum(last)')."000,".mysql_result($results,$j, 'sum(current)')."000,".mysql_result($results,$j, 'sum(plus1)')."000,".mysql_result($results,$j, 'sum(plus2)')."000,".mysql_result($results,$j, 'sum(plus3)')."000   </span>
  </td></tr><TR>

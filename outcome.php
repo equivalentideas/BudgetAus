@@ -103,7 +103,7 @@ echo
 $result = mysql_query("SELECT Portfolio,Agency,Program,Component,outcome,last,current,plus1,plus2,plus3,sum(last),sum(current),sum(plus1),sum(plus2),sum(plus3) 
 FROM budget_table2 WHERE PORTFOLIO LIKE('%$portfolio%') && outcome LIKE('%$outcome%') GROUP BY agency,$outcome   ");//Output is summed by agency then by outcome within each agency for selected portfolio
 $num_rows = mysql_num_rows($result);
-echo "<table class='results'><tr><td><h3>Agency </h3><th>2013/14</h></tr> ";
+echo "<table class='results'><tr><td><h3>Agency </h3><th>Current</h></tr> ";
 ($rows = mysql_num_rows($result));
 for ($j = 0 ; $j < $rows ; ++$j)
 
@@ -112,7 +112,7 @@ echo
 "  
 <TR>
  <td>
- <a href='agency_results.php?agency=%22".mysql_result($result,$j, 'Agency')."%22' target='_blank'
+ <a href='agency_results.php?agency=%22".mysql_result($result,$j, 'Agency')."%22&budget_year=current' target='_blank'
  title='Find all results for ".mysql_result($result,$j, 'Agency')." - opens in new window'>".mysql_result($result,$j, 'Agency')."</a></TD>
 <TD class='money'>
 $".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>
