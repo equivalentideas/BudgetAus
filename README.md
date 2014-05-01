@@ -11,6 +11,6 @@ Federal budget data is available under the Creative Commons 3.0 licence.
 
 The public working version of the code at this address may not match the code in the repository as pushing to Git does not push to the server.
 
-Please note that for 'last' year's budget figures (figures published on budget night 2012) there are only figures for 2011-12 and 2012-13 and no forward funding years. 
+Please note that for 'last' year's budget figures (figures published on budget night 2012) there are only figures for 2011-12 and 2012-13 and no forward funding years. This year's data was also not broken down to the same extent as budget_table2 (the current year's data) which is why there are a different number of rows in the table and program components. Budget_table1 was done manually, budget_table2 was mainly done by scraping but also required some manual work.
 
 This code is licenced under the GNU General Public Licence https://www.gnu.org/licenses/gpl.html
