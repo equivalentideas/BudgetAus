@@ -21,7 +21,7 @@ ECHO
 "<TABLE class='two'>
 <TR>
 <TD>
-<a href='program_results.php?program=%22".mysql_result($result2,$j, 'Program')."%22' target='_blank'
+<a href='program_results.php?program=%22".mysql_result($result2,$j, 'Program')."%22&budget_year=current' target='_blank'
  title='Get Schemes for this Program in new window'>".mysql_result($result2,$j, 'Program')."</a></td>
  <td><div class='money'>$".number_format(mysql_result($result2,$j, 'sum(plus1)')).",000</div>
 </TD></TR>
@@ -106,15 +106,15 @@ for ($j = 0 ; $j < $rows ; ++$j)
 "<TABLE class='results'>
 
 <TR><TD width='30px'>Portfolio</TD>
-<TD width='300px'><a href='portfolio_results.php?portfolio=%22".mysql_result($result,$j, 'Portfolio')."%22'  target='_blank' title=' Portfolio results for ".mysql_result($result,$j, 'Portfolio')." - opens in new window'>".mysql_result($result,$j, 'Portfolio')."</a>
+<TD width='300px'><a href='portfolio_results.php?portfolio=%22".mysql_result($result,$j, 'Portfolio')."%22&budget_year=current'  target='_blank' title=' Portfolio results for ".mysql_result($result,$j, 'Portfolio')." - opens in new window'>".mysql_result($result,$j, 'Portfolio')."</a>
 </TD></TR>
 <TR><TD width='30px'>Agency</TD>
-<TD width='300px'><a href='agency_results.php?agency=%22".mysql_result($result,$j, 'Agency')."%22'  target='_blank' title='Agency results for ".mysql_result($result,$j, 'Agency')." - opens in new window'>".mysql_result($result,$j, 'Agency')."</a>
+<TD width='300px'><a href='agency_results.php?agency=%22".mysql_result($result,$j, 'Agency')."%22&budget_year=current'  target='_blank' title='Agency results for ".mysql_result($result,$j, 'Agency')." - opens in new window'>".mysql_result($result,$j, 'Agency')."</a>
 </TD></TR>
 
 <TR><TD width='30px'>Program</TD>
 <TD width='300px'>
-<a href='program_results.php?program=%22".mysql_result($result,$j, 'Program')."%22' target='_blank' title='Get Schemes for this Program in new window'>".mysql_result($result,$j, 'Program')."</a></TD></TR>
+<a href='program_results.php?program=%22".mysql_result($result,$j, 'Program')."%22&budget_year=current' target='_blank' title='Get Schemes for this Program in new window'>".mysql_result($result,$j, 'Program')."</a></TD></TR>
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>
 <td>Current</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>

@@ -37,7 +37,7 @@ $num_rows = mysql_num_rows($result);
 {
 for ($j = 0 ; $j < $rows ; ++$j)
       echo
-	  "<p>".mysql_result($result,$j, 'agency').": <b>$".number_format(mysql_result($result,$j, 'sum(current)')).",000 </b> 
+	  "<p><a href='agency_results.php?agency=%22".mysql_result($result,$j, 'agency')."%22&budget_year=current'>".mysql_result($result,$j, 'agency')."</a>: <b>$".number_format(mysql_result($result,$j, 'sum(current)')).",000 </b> 
 
  </p>";
  }
@@ -111,10 +111,10 @@ for ($j = 0 ; $j < $rows ; ++$j)
    "<table class='results'>
 <tr><td width='30px'>Portfolio</td>
 <td width='300px'>
-<a href='http://infoaus.net/budget/portfolio_results.php?portfolio=%22".mysql_result($results,$j, 'Portfolio')."%22&budget_year=current'  target='_blank' title='Find all Portfolio results for ".mysql_result($results,$j, 'Portfolio')." - opens in new window'>".mysql_result($results,$j, 'Portfolio')."</a>
+<a href='portfolio_results.php?portfolio=%22".mysql_result($results,$j, 'Portfolio')."%22&budget_year=current'  target='_blank' title='Find all Portfolio results for ".mysql_result($results,$j, 'Portfolio')." - opens in new window'>".mysql_result($results,$j, 'Portfolio')."</a>
 </td></tr>
 <tr><td class='left'>Agency</td>
-<td><a href='http://infoaus.net/budget/agency_results.php?agency=%22".mysql_result($results,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($results,$j, 'Agency')." 'target='_blank' '>".mysql_result($results,$j, 'Agency')."</a>
+<td><a href='agency_results.php?agency=%22".mysql_result($results,$j, 'Agency')."%22&budget_year=current'   title='Find all Agency results for ".mysql_result($results,$j, 'Agency')." 'target='_blank' '>".mysql_result($results,$j, 'Agency')."</a>
 </td></tr>
       
 <TR>

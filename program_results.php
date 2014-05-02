@@ -20,7 +20,121 @@
 </form>
 	</div><!--content div-->
 <div id='chart'></div>
+ <?php
+  
+include('scripts/db.php');
 
+ if (mysql_select_db($db_database))
+
+   {
+$program = $_GET['program']; 
+   }
+
+  if($budget_year==current) 
+	{
+     echo
+    "
+	<table><tbody>
+	<tr>
+	<td>
+	Search term: ".$program."
+	</td>
+	</tr>
+	";
+	
+$results = mysql_query("SELECT PORTFOLIO,program,agency,component,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
+FROM budget_table2 WHERE MATCH(program) AGAINST('$program' IN BOOLEAN MODE) GROUP BY PROGRAM ");
+
+//this query groups results triggered by user clicking on agency level url and shows all programs within agency and trendline
+
+    $num_rows = mysql_num_rows($results);
+echo "
+<tr>
+<td>
+Number of Programs:".$num_rows."
+</td>
+</tr>";
+ echo
+  "
+ <tr>
+ <td>
+   <a href='program_results_excel.php?program=".$program."' target='_blank'>
+   Excel Download</a>
+  </td>
+  </tr> 
+<tbody>
+</table>
+<div class='clear'></div>
+ ";
+        ($rows = mysql_num_rows($results));
+
+for ($j = 0 ; $j < $rows ; ++$j)
+
+ECHO
+  
+"<TABLE clas='two'>
+<TR>
+<TD>
+<a href='program_results.php?program=%22".mysql_result($results,$j, 'program')."%22&budget_year=current'' target='_blank' title='Get program for this agency in new window'>".mysql_result($results,$j, 'program')."</a>
+</TD></TR>
+<TD class='money'>
+<span class='inlinesparkline'>".mysql_result($results,$j, 'sum(last)')."000,".mysql_result($results,$j, 'sum(current)')."000,".mysql_result($results,$j, 'sum(plus1)')."000,".mysql_result($results,$j, 'sum(plus2)')."000,".mysql_result($results,$j, 'sum(plus3)')."000   </span>
+ </td></tr>
+</table>";
+
+}
+else
+	{
+     echo
+     "
+	<table><tbody>
+	<tr>
+	<td>
+	Search term: ".$program."
+	</td>
+	</tr>
+	";
+$results2 = mysql_query("SELECT PORTFOLIO,agency,program,component,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
+FROM budget_table WHERE MATCH(program) AGAINST('$program' IN BOOLEAN MODE)  GROUP BY PROGRAM");
+
+    $num_rows = mysql_num_rows($results2);
+echo "
+<tr>
+<td>
+Number of Programs:".$num_rows."
+</td>
+</tr>";
+ echo
+  "
+ <tr>
+ <td>
+   <a href='program_results_excel.php?program=".$program."' target='_blank'>
+   Excel Download</a>
+  </td>
+  </tr> 
+<tbody>
+</table>
+<div class='clear'></div>
+ ";
+        ($rows = mysql_num_rows($results2));
+
+for ($j = 0 ; $j < $rows ; ++$j)
+          
+
+            ECHO
+  
+"<TABLE clas='two'>
+<TR>
+<TD>
+<a href='program_results.php?program=%22".mysql_result($results2,$j, 'program')."%22&budget_year=last' target='_blank' title='Get Programs for this agency in new window'>".mysql_result($results2,$j, 'program')."</a>
+</TD></TR>
+<TD class='money'>
+<span class='inlinesparkline'>".mysql_result($results2,$j, 'sum(last)')."000,".mysql_result($results2,$j, 'sum(current)')."000,".mysql_result($results2,$j, 'sum(plus1)')."000,".mysql_result($results2,$j, 'sum(plus2)')."000,".mysql_result($results2,$j, 'sum(plus3)')."000   </span>
+ </td></tr>
+</table>";
+          
+}
+?>
 
  
 	

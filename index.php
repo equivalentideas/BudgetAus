@@ -296,31 +296,59 @@ $num_rows = mysql_num_rows($total_payments_current);
 <div id="accordion" role="main">
 <div class='content'>
 
+
+ 
 	<?PHP
 	//ini_set('display_errors', 0);
 
 include('scripts/db.php');
+
   $result =mysql_query("SELECT Portfolio,current,SUM(current) from budget_table2 GROUP BY PORTFOLIO ORDER BY SUM(current) DESC ");
   $num_rows = mysql_num_rows($result);
 
    ($rows = mysql_num_rows($result));
    echo
    "
-  <table class='results'>
+  <table class='results'><tbody>
 <tr>
-<td><b>Portfolio</b></td><td>Total</td></tr>";
+<td><b>Current Budget Year Data</b></td><td>Total</td></tr>";
   for ($j = 0 ; $j < $rows ; ++$j)
   {
    echo
 "<tr>
-<td><a href='portfolio_results.php?portfolio=%22".mysql_result($result,$j, 'Portfolio')."%22&submit=Show'  target='_blank' title=' Portfolio results for ".mysql_result($result,$j, 'Portfolio')." - opens in new window'>".mysql_result($result,$j, 'Portfolio')."</a>
+<td><a href='portfolio_results.php?portfolio=%22".mysql_result($result,$j, 'Portfolio')."%22&budget_year=current'  target='_blank' title=' Portfolio results for ".mysql_result($result,$j, 'Portfolio')." - opens in new window'>".mysql_result($result,$j, 'Portfolio')."</a>
 </TD>
 <td class='money'>$".number_format(mysql_result($result,$j, 'SUM(current)')).",000</td></tr>";
 
  }
  echo
  
- "</table>";
+ "</tbody></table>";
+ 
+
+ {
+  $result =mysql_query("SELECT Portfolio,current,SUM(current) from budget_table GROUP BY PORTFOLIO ORDER BY SUM(current) DESC ");
+  $num_rows = mysql_num_rows($result);
+
+   ($rows = mysql_num_rows($result));
+   echo
+   "
+  <table class='results'><tbody>
+<tr>
+<td><b>Last Budget Year Results</b></td><td>Total</td></tr>";
+  for ($j = 0 ; $j < $rows ; ++$j)
+  {
+   echo
+"<tr>
+<td><a href='portfolio_results.php?portfolio=%22".mysql_result($result,$j, 'Portfolio')."%22&budget_year=last'  target='_blank' title=' Portfolio results for ".mysql_result($result,$j, 'Portfolio')." - opens in new window'>".mysql_result($result,$j, 'Portfolio')."</a>
+</TD>
+<td class='money'>$".number_format(mysql_result($result,$j, 'SUM(current)')).",000</td></tr>";
+
+ }
+ echo
+ 
+ "</tbody></table>";
+ }
  ?>
 </div><!--content-->
 

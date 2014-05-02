@@ -21,7 +21,82 @@
 	</div><!--content div-->
 <div id='chart'></div>
 
+ <?php
+  
+include('scripts/db.php');
 
+ if (mysql_select_db($db_database))
+
+   {
+$agency = $_GET['agency']; 
+   }
+
+  if($budget_year==current) 
+	{
+     echo
+    "<h3>".$agency."</h3>";
+$results = mysql_query("SELECT PORTFOLIO,program,agency,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
+FROM budget_table2 WHERE MATCH(agency) AGAINST('$agency' IN BOOLEAN MODE) GROUP BY program ORDER BY AGENCY");//this query groups results triggered by user clicking on agency level url and shows all programs within agency and trendline
+
+    $num_rows = mysql_num_rows($results);
+echo "<h5>Number of Agencies:".$num_rows."</h5>";
+ echo
+  "
+   <div class='button'>
+   <a href='agency_results_excel.php?agency=".$agency."' target='_blank'>
+   Excel</a></div> 
+<p></p><div class='clear'></div>
+ ";
+        ($rows = mysql_num_rows($results));
+
+for ($j = 0 ; $j < $rows ; ++$j)
+
+ECHO
+  
+"<TABLE clas='two'>
+<TR>
+<TD>
+<a href='program_results.php?program=%22".mysql_result($results,$j, 'program')."%22&budget_year=current'' target='_blank' title='Get Programs for this agency in new window'>".mysql_result($results,$j, 'program')."</a>
+</TD></TR>
+<TD class='money'>
+<span class='inlinesparkline'>".mysql_result($results,$j, 'sum(last)')."000,".mysql_result($results,$j, 'sum(current)')."000,".mysql_result($results,$j, 'sum(plus1)')."000,".mysql_result($results,$j, 'sum(plus2)')."000,".mysql_result($results,$j, 'sum(plus3)')."000   </span>
+ </td></tr>
+</table>";
+
+}
+else
+	{
+     echo
+    "<h3>".$agency."</h3>";
+$results2 = mysql_query("SELECT PORTFOLIO,agency,program,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
+FROM budget_table WHERE MATCH(agency) AGAINST('$agency' IN BOOLEAN MODE) GROUP BY program ORDER BY AGENCY");//this query groups results triggered by user clicking on portfolio level url and shows all agencies within that portfolio with funding summed at agency level.
+
+    $num_rows = mysql_num_rows($results2);
+echo "<h5>Number of Agencies:".$num_rows."</h5>
+   <div class='button'>
+   <a href='agency_results_excel.php?agency=".$agency."' target='_blank'>
+   Excel</a></div> 
+<p></p><div class='clear'></div>
+ ";
+        ($rows = mysql_num_rows($results2));
+
+for ($j = 0 ; $j < $rows ; ++$j)
+          
+
+            ECHO
+  
+"<TABLE clas='two'>
+<TR>
+<TD>
+<a href='program_results.php?program=%22".mysql_result($results2,$j, 'program')."%22&budget_year=last' target='_blank' title='Get Programs for this agency in new window'>".mysql_result($results2,$j, 'program')."</a>
+</TD></TR>
+<TD class='money'>
+<span class='inlinesparkline'>".mysql_result($results2,$j, 'sum(last)')."000,".mysql_result($results2,$j, 'sum(current)')."000,".mysql_result($results2,$j, 'sum(plus1)')."000,".mysql_result($results2,$j, 'sum(plus2)')."000,".mysql_result($results2,$j, 'sum(plus3)')."000   </span>
+ </td></tr>
+</table>";
+          
+}
+?>
  
 	
 
@@ -141,7 +216,7 @@ echo
 
 "<table class='top'>
 <tr><td width='100px'>Total %</td><td width='100px'>Total Cost </td><td width='100px'>Personal Tax </td>
- <td width='100px'>Company Tax </td></tr>
+ <td width='100px'>Other Taxes</td></tr>
 <tr><td class='total'><span id='result_percentage'><b>".number_format($percent, 3)."%</b></span></td>
 <td class='total'><b>$".number_format($billion, 3)." B</b></td>
 <td class='total'><b>$".number_format($actual_PIT, 3)." B</b></td>
@@ -158,7 +233,7 @@ echo
 
 	   
 	  {
-	     $result =  mysql_query("SELECT Portfolio,Program,Agency,Acronym,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
+	     $result =  mysql_query("SELECT Portfolio,Program,Agency,Acronym,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3),SOURCE,URL
 FROM budget_table2  WHERE MATCH(Agency,Acronym) AGAINST('$agency'IN BOOLEAN MODE) GROUP BY Agency ");//selects agency level results matching user input - This is a BOOLEAN search
        
 
@@ -185,9 +260,9 @@ if ($num_rows>0)//triggers if there is a positive result on Boolean query
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>
 <td>Current</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>
-<td>Plus 1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
-<td>Plus 2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
-<td>Plus 3</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr><tr>
+<td>Next</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
+<td>Next +1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr><tr>
 <td>Trend</td><TD class='money'>
 <span class='inlinesparkline'>".mysql_result($result,$j, 'sum(last)')."000,".mysql_result($result,$j, 'sum(current)')."000,".mysql_result($result,$j, 'sum(plus1)')."000,".mysql_result($result,$j, 'sum(plus2)')."000,".mysql_result($result,$j, 'sum(plus3)')."000   </span>
  </td></tr><TR>
