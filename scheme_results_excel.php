@@ -1,157 +1,17 @@
-<?php include('scripts/header.php');?>      
-<div id="blog" role="complimentary">
- <div class="featured"> 
-<h3>Scheme Search</h3>
-<h5>This form lists all the Schemes where your search term is part of the Scheme name eg safety, research. </h5>
-  <form action="scheme_results.php" method="GET">
-<div role="form">
-   <lable for="scheme_search"><input type="text"  id="scheme" name="scheme" value="nuclear" /></lable>
-  
-   <lable for="budget_year">
-<select name='budget_year'>
-<option value='last'>Last</option>
-<option value='current'>Current</option>
-
-</select>
-   </lable>
-   <lable for="submit"><input type="submit" name="submit" value="Show" id="submit" /></lable>
-
-</div><!--innerform-->
-</form>
-	</div><!--content div-->
-<div id='chart'></div>
-
-
+<?php include('scripts/magic.php');?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" 
+    "http://www.w3.org/TR/html4/strict.dtd">
+    
+      <head>
   <?php
-  
-include('scripts/db.php');
+header("Content-type: application/vnd.ms-excel");
+header("Content-Disposition: attachment;Filename=scheme_results.xls");
 
- if (mysql_select_db($db_database))
+echo "<html>";
+echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=Windows-1252\">";
+echo "<body>";
+echo "<b>Scheme Results</b> \n ";
 
-   {
-$scheme = $_GET['scheme']; 
-   }
- {
-$budget_year = $_GET['budget_year']; 
-   }
-  if($budget_year==current) 
-	{
-     echo
-    "
-	<table><tbody>
-	<tr>
-	<td>
-	Search term: ".$scheme."
-	</td>
-	</tr>
-	";
-	
-$results = mysql_query("SELECT PORTFOLIO,program,agency,component,last,sum(last),current,sum(current),plus1,plus2,plus3 
-FROM budget_table2 WHERE MATCH(component) AGAINST('$component' IN BOOLEAN MODE) GROUP BY PROGRAM ");
-
-
-
-    $num_rows = mysql_num_rows($results);
-echo "
-<tr>
-<td>
-Number of Schemes:".$num_rows."
-</td>
-</tr>";
- echo
-  "
- <tr>
- <td>
-   <a href='scheme_results_excel.php?scheme=".$scheme."&budget_year=current' target='_blank'>
-   Excel Download</a>
-  </td>
-  </tr> 
-<tbody>
-</table>
-<div class='clear'></div>
- ";
-        ($rows = mysql_num_rows($results));
-
-for ($j = 0 ; $j < $rows ; ++$j)
-
-ECHO
-  
-"<TABLE clas='two'>
-<TR>
-<TD>
-<a href='scheme_results.php?scheme=%22".mysql_result($results,$j, 'component')."%22&budget_year=current' target='_blank' title='Get program for this agency in new window'>".mysql_result($results,$j, 'component')."</a>
-</TD></TR>
-<TR>
-<TD class='money'>
-<span class='inlinesparkline'>".mysql_result($results,$j, 'sum(last)')."000,".mysql_result($results,$j, 'sum(current)')."000,".mysql_result($results,$j, 'sum(plus1)')."000,".mysql_result($results,$j, 'sum(plus2)')."000,".mysql_result($results,$j, 'sum(plus3)')."000   </span>
- </td></tr>
-</table>";
-
-}
-else
-	{
-     echo
-     "
-	<table><tbody>
-	<tr>
-	<td>
-	Search term: ".$program."
-	</td>
-	</tr>
-	";
-$results2 = mysql_query("SELECT PORTFOLIO,agency,program,component,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
-FROM budget_table WHERE MATCH(program) AGAINST('$program' IN BOOLEAN MODE)  GROUP BY PROGRAM");
-
-    $num_rows = mysql_num_rows($results2);
-echo "
-<tr>
-<td>
-Number of Schemes:".$num_rows."
-</td>
-</tr>";
- echo
-  "
- <tr>
- <td>
-   <a href='program_results_excel.php?program=".$program."&budget_year=last' target='_blank'>
-   Excel Download</a>
-  </td>
-  </tr> 
-<tbody>
-</table>
-<div class='clear'></div>
- ";
-        ($rows = mysql_num_rows($results2));
-
-for ($j = 0 ; $j < $rows ; ++$j)
-          
-
-            ECHO
-  
-"<TABLE clas='two'>
-<TR>
-<TD>
-<a href='program_results.php?program=%22".mysql_result($results2,$j, 'program')."%22&budget_year=last' target='_blank' title='Get Programs for this agency in new window'>".mysql_result($results2,$j, 'program')."</a>
-</TD>
-</TR>
-<TR>
-<TD class='money'>
-<span class='inlinesparkline'>".mysql_result($results2,$j, 'sum(last)')."000,".mysql_result($results2,$j, 'sum(current)')."000,".mysql_result($results2,$j, 'sum(plus1)')."000,".mysql_result($results2,$j, 'sum(plus2)')."000,".mysql_result($results2,$j, 'sum(plus3)')."000   </span>
- </td></tr>
-</table>";
-          
-}
-?>
-	
-
-      </div>
-   
-	<div id="accordion" role="main">
-	 
-	
-<div class="three"> 
-
-<?php
 include('scripts/db.php');
 
 if (mysql_select_db($db_database))
@@ -257,7 +117,7 @@ echo
 
 "<table class='top'>
 <tr><td width='100px'>Total %</td><td width='100px'>Total Cost </td><td width='100px'>Personal Tax </td>
- <td width='100px'>Company Tax </td></tr>
+ <td width='100px'>Other Taxes </td></tr>
 <tr><td class='total'><span id='result_percentage'><b>".number_format($percent, 3)."%</b></span></td>
 <td class='total'><b>$".number_format($billion, 3)." B</b></td>
 <td class='total'><b>$".number_format($actual_PIT, 3)." B</b></td>
@@ -292,7 +152,7 @@ if ($num_rows>0)//triggers if there is a positive result on Boolean query
 <a href='program_results.php?program=%22".mysql_result($result,$j, 'Program')."%22&budget_year=current'  target='_blank' title='Find all Program results for ".mysql_result($result,$j, 'Program')." - opens in new window'>".mysql_result($result,$j, 'Program')."</a>
 </td></tr>
 <tr><td class='left'>Scheme</td>
-<td><a href='scheme_results.php?scheme=%22".mysql_result($result,$j, 'component')."%22&budget_year=current'   title='Find all Scheme results for ".mysql_result($result,$j, 'component')." target='_blank'>".mysql_result($result,$j, 'component')."</a>
+<td><a href='scheme_results.php?scheme=%22".mysql_result($result,$j, 'component')."%22&budget_year=current'   title='Find all Scheme results for ".mysql_result($result,$j, 'component')." 'target='_blank' '>".mysql_result($result,$j, 'component')."</a>
 </td></tr>
       
 <TR>
@@ -300,10 +160,8 @@ if ($num_rows>0)//triggers if there is a positive result on Boolean query
 <td>Current</td><TD class='money'>$".number_format(mysql_result($result,$j, 'current')).",000  </TD></tr><tr>
 <td>Next </td><TD class='money'>$".number_format(mysql_result($result,$j, 'plus1')).",000  </td></tr><tr>
 <td>Next +1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'plus2')).",000  </td></tr><tr>
-<td>Next +2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'plus3')).",000  </td></tr><tr>
-<td>Trend</td><TD class='money'>
-<span class='inlinesparkline'>".mysql_result($result,$j, 'last')."000,".mysql_result($result,$j, 'current')."000,".mysql_result($result,$j, 'plus1')."000,".mysql_result($result,$j, 'plus2')."000,".mysql_result($result,$j, 'plus3')."000   </span>
- </td></tr><TR>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'plus3')).",000  </td></tr>
+<TR>
 <TD> Source</td> 
 <td class='source'><a href=" .mysql_result($result,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($result,$j, 'Source')."</a> </TD>
 
@@ -328,7 +186,7 @@ if ($num_rows>0)//triggers if there is a positive result on Boolean query
 
 
 
-$portfolio_results =  mysql_query("SELECT Portfolio from budget_table2 WHERE Portfolio LIKE('%$scheme%') Group by Portfolio ");
+$portfolio_results =  mysql_query("SELECT Portfolio from budget_table2 WHERE Portfolio LIKE('%".$scheme."%') Group by Portfolio ");
 
  $num_rows = mysql_num_rows($portfolio_results);
  ($rows = mysql_num_rows($portfolio_results));
@@ -341,13 +199,13 @@ echo
 
 <tr>
 
-<td> <a href='portfolio_results.php?portfolio=".mysql_result($portfolio_results,$j, 'Portfolio')."&budget_year=current'  target='_blank' title='Portfolio Results for ".mysql_result($portfolio_results,$j, 'Portfolio')." - opens in new window'>".mysql_result($portfolio_results,$j, 'Portfolio')."</a></td>
+<td> <a href='portfolio_results.php?portfolio=".mysql_result($portfolio_results,$j, 'Portfolio')."'  target='_blank' title='Portfolio Results for ".mysql_result($portfolio_results,$j, 'Portfolio')." - opens in new window'>".mysql_result($portfolio_results,$j, 'Portfolio')."</a></td>
 
 </tr>
 </table>";
 ///////////////////////////////////////////////////////////
 
-$agency_results =  mysql_query("SELECT Portfolio,program,Agency,Acronym from budget_table2 WHERE Agency || Acronym  LIKE('%$scheme%') Group by Agency ");
+$agency_results =  mysql_query("SELECT Portfolio,program,Agency,Acronym from budget_table2 WHERE Agency || Acronym  LIKE('%".$scheme."%') Group by Agency ");
 
  $num_rows = mysql_num_rows($agency_results);
  ($rows = mysql_num_rows($agency_results));
@@ -365,7 +223,7 @@ echo
 </tr></table>";
 /////////////////////////////////////////////////////////////////
 
-$program_results =  mysql_query("SELECT portfolio,agency,Program from budget_table2 WHERE Program LIKE('%$scheme%') Group by Program  ");
+$program_results =  mysql_query("SELECT portfolio,agency,Program from budget_table2 WHERE Program LIKE('%".$scheme."%') Group by Program  ");
 
  $num_rows = mysql_num_rows($program_results);
  ($rows = mysql_num_rows($program_results));
@@ -428,21 +286,18 @@ for ($j = 0 ; $j < $rows ; ++$j)
  echo
    "<table class='results'>
    <tr><td class='left'>Program</td>
-<td><a href='program_results.php?program=%22".mysql_result($result,$j, 'Program')."%22&budget_year=last'   title='Find all Agency results for ".mysql_result($result,$j, 'program')." target='_blank' >".mysql_result($result,$j, 'program')."</a>
+<td><a href='program_results.php?program=%22".mysql_result($result,$j, 'Program')."%22&budget_year=last'   title='Find all Agency results for ".mysql_result($result,$j, 'program')." 'target='_blank' '>".mysql_result($result,$j, 'program')."</a>
 </td></tr>
 <tr>
 <td width='30px'>Scheme</td>
-<td><a href='scheme_results.php?scheme=%22".mysql_result($result,$j, 'Component')."%22&budget_year=last'   title='Find all Scheme results for ".mysql_result($result,$j, 'Component')." target='_blank' >".mysql_result($result,$j, 'Component')."</a>
+<td><a href='scheme_results.php?scheme=%22".mysql_result($result,$j, 'Component')."%22&budget_year=last'   title='Find all Scheme results for ".mysql_result($result,$j, 'Component')." 'target='_blank' '>".mysql_result($result,$j, 'Component')."</a>
 </td></tr>  
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>
 <td>Current</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>
 <td>Next </td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
 <td>Next +1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
-<td>Next +2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr><tr>
-<td>Trend</td><TD class='money'>
-<span class='inlinesparkline'>".mysql_result($result,$j, 'sum(last)')."000,".mysql_result($result,$j, 'sum(current)')."000,".mysql_result($result,$j, 'sum(plus1)')."000,".mysql_result($result,$j, 'sum(plus2)')."000,".mysql_result($result,$j, 'sum(plus3)')."000   </span>
- </td></tr><TR>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr><TR>
 <TD> Source</td> 
 <td class='source'><a href=" .mysql_result($result,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($result,$j, 'Source')."</a> </TD>
 
@@ -467,21 +322,19 @@ FROM budget_table WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE)  ord
  echo
    "<table class='results'>
    <tr><td class='left'>Program</td>
-<td><a href='program_results.php?program=%22".mysql_result($results,$j, 'program')."%22&budget_year=last'   title='Find all Agency results for ".mysql_result($results,$j, 'program')." target='_blank'>".mysql_result($results,$j, 'program')."</a>
+<td><a href='program_results.php?program=%22".mysql_result($results,$j, 'program')."%22&budget_year=last'   title='Find all Agency results for ".mysql_result($results,$j, 'program')." 'target='_blank' '>".mysql_result($results,$j, 'program')."</a>
 </td></tr>
 <tr>
 <td width='30px'>Scheme</td>
-<td><a href='scheme_results.php?scheme=%22".mysql_result($results,$j, 'component')."%22&budget_year=last'   title='Find all Scheme results for ".mysql_result($results,$j, 'component')." target='_blank'>".mysql_result($results,$j, 'component')."</a>
+<td><a href='scheme_results.php?scheme=%22".mysql_result($results,$j, 'component')."%22&budget_year=last'   title='Find all Scheme results for ".mysql_result($results,$j, 'component')." 'target='_blank' '>".mysql_result($results,$j, 'component')."</a>
 </td></tr>  
 <TR>
 <td>Last</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(last)')).",000  </TD></tr><tr>
 <td>Current</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(current)')).",000  </TD></tr><tr>
 <td>Next </td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus1)')).",000  </td></tr><tr>
 <td>Next +1</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus2)')).",000  </td></tr><tr>
-<td>Next +2</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus3)')).",000  </td></tr><tr>
-<td>Trend</td><TD class='money'>
-<span class='inlinesparkline'>".mysql_result($results,$j, 'sum(last)')."000,".mysql_result($results,$j, 'sum(current)')."000,".mysql_result($results,$j, 'sum(plus1)')."000,".mysql_result($results,$j, 'sum(plus2)')."000,".mysql_result($results,$j, 'sum(plus3)')."000   </span>
- </td></tr><TR>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus3)')).",000  </td></tr>
+<TR>
 <TD> Source</td> 
 <td class='source'><a href=" .mysql_result($results,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($results,$j, 'Source')."</a> </TD>
 
