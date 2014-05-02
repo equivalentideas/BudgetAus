@@ -1,133 +1,18 @@
-    <?php include('scripts/header.php');?>      
-<div id="blog" role="complimentary">
+<?php include('scripts/magic.php');?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" 
+    "http://www.w3.org/TR/html4/strict.dtd">
+    
+      <head>
+  <?php
+header("Content-type: application/vnd.ms-excel");
+header("Content-Disposition: attachment;Filename=scheme_results.xls");
 
-<div id='chart'></div><!--this div applies the CSS styles to the Flot chart -->
-<div class='clear'></div>
-
-
- <?php
-  
-include('scripts/db.php');
-
- if (mysql_select_db($db_database))
-
-   {
-$portfolio = $_GET['portfolio']; 
-   }
-
-  if($budget_year==current) 
-	{
-     echo
-     "
-	<table><tbody>
-	<tr>
-	<td>
-	Search term: ".$portfolio."
-	</td>
-	</tr>
-	";
-$results = mysql_query("SELECT PORTFOLIO,agency,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
-FROM budget_table2 WHERE MATCH(Portfolio) AGAINST('$portfolio' IN BOOLEAN MODE) GROUP BY Agency");
-
-//this query groups results triggered by user clicking on portfolio level url and shows all agencies within that portfolio with funding summed at agency level.
-
-    $num_rows = mysql_num_rows($results);
-
- echo "
-<tr>
-<td>
-Number of Agencies:".$num_rows."
-</td>
-</tr>";
- echo
-  "
- <tr>
- <td>
-   <a href='portfolio_results_excel.php?portfolio=".$portfolio."&budget_year=current' target='_blank'>
-   Excel Download</a>
-  </td>
-  </tr> 
-<tbody>
-</table>
-<div class='clear'></div>
- ";
-        ($rows = mysql_num_rows($results));
-
-for ($j = 0 ; $j < $rows ; ++$j)
-
-ECHO
-  
-"<TABLE clas='two'>
-<TR>
-<TD>
-<a href='agency_results.php?agency=%22".mysql_result($results,$j, 'agency')."%22&budget_year=current'' target='_blank' title='Get Programs for this agency in new window'>".mysql_result($results,$j, 'agency')."</a>
-</TD></TR>
-<TD class='money'>
-<span class='inlinesparkline'>".mysql_result($results,$j, 'sum(last)')."000,".mysql_result($results,$j, 'sum(current)')."000,".mysql_result($results,$j, 'sum(plus1)')."000,".mysql_result($results,$j, 'sum(plus2)')."000,".mysql_result($results,$j, 'sum(plus3)')."000   </span>
- </td></tr>
-</table>";
-
-}
-else
-	{
-     echo
-    "<h3>".$portfolio."</h3>";
-$results2 = mysql_query("SELECT PORTFOLIO,agency,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
-FROM budget_table WHERE MATCH(Portfolio) AGAINST('$portfolio' IN BOOLEAN MODE) GROUP BY Agency");
-
-//this query groups results triggered by user clicking on portfolio level url and shows all agencies within that portfolio with funding summed at agency level.
-
-    $num_rows = mysql_num_rows($results2);
-
- echo "
-<tr>
-<td>
-Number of Agencies:".$num_rows."
-</td>
-</tr>";
- echo
-  "
- <tr>
- <td>
-   <a href='portfolio_results_excel.php?portfolio=".$portfolio."&budget_year=last' target='_blank'>
-   Excel Download</a>
-  </td>
-  </tr> 
-<tbody>
-</table>
-<div class='clear'></div>
- ";
-        ($rows = mysql_num_rows($results2));
-
-for ($j = 0 ; $j < $rows ; ++$j)
-          
-
-            ECHO
-  
-"<TABLE clas='two'>
-<TR>
-<TD>
-<a href='agency_results.php?agency=%22".mysql_result($results2,$j, 'agency')."%22&budget_year=last' target='_blank' title='Get Programs for this agency in new window'>".mysql_result($results2,$j, 'agency')."</a>
-</TD></TR>
-<TD class='money'>
-<span class='inlinesparkline'>".mysql_result($results2,$j, 'sum(last)')."000,".mysql_result($results2,$j, 'sum(current)')."000,".mysql_result($results2,$j, 'sum(plus1)')."000,".mysql_result($results2,$j, 'sum(plus2)')."000,".mysql_result($results2,$j, 'sum(plus3)')."000   </span>
- </td></tr>
-</table>";
-          
-}
-?>
- 
-       </div>
-     
-   
-	<div id="accordion" role="main">
-	 
-	
+echo "<html>";
+echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=Windows-1252\">";
+echo "<body>";
+echo "<b>Scheme Results</b> \n ";
 
 
-<div class='three'>
-
-	<?php
 
 include('scripts/db.php');
 

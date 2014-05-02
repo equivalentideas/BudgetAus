@@ -243,12 +243,12 @@ $num_rows = mysql_num_rows($total_payments_current);
 
 
         <div id='twitter'>
-	  <h3>Budget Transparency on Twitter</h3>
+	  <h3>@Info_Aus on Twitter</h3>
 	
-  <a class="twitter-timeline" href="https://twitter.com/search?q=budget+transparency" data-widget-id="385967691481112578">Tweets about "budget transparency"</a>
+ <a class="twitter-timeline" href="https://twitter.com/search?q=%40Info_Aus" data-widget-id="414533522146074625">Tweets about "@Info_Aus"</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-<h3>InfoAus Blog</h3>
-<script id="feed-1378855660180404" type="text/javascript" src="http://infoaus.net/rss2html/?url=http%3A%2F%2Finfoaus.net%2Fwp%2Ffeed%2F&detail=100&limit=2&showtitle=false&nocache=true&type=js&id=1378855660180404"></SCRIPT>
+
+
 
       </div> 
     
