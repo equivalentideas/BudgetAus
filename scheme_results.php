@@ -46,8 +46,8 @@ $budget_year = $_GET['budget_year'];
 	</tr>
 	";
 	
-$results = mysql_query("SELECT PORTFOLIO,program,agency,component,last,sum(last),current,sum(current),plus1,plus2,plus3 
-FROM budget_table2 WHERE MATCH(component) AGAINST('$component' IN BOOLEAN MODE) GROUP BY PROGRAM ");
+$results = mysql_query("SELECT PORTFOLIO,program,agency,component,last,current,plus1,plus2,plus3 
+FROM budget_table2 WHERE MATCH(component) AGAINST('$scheme' IN BOOLEAN MODE)  ");
 
 
 
@@ -83,7 +83,7 @@ ECHO
 </TD></TR>
 <TR>
 <TD class='money'>
-<span class='inlinesparkline'>".mysql_result($results,$j, 'sum(last)')."000,".mysql_result($results,$j, 'sum(current)')."000,".mysql_result($results,$j, 'sum(plus1)')."000,".mysql_result($results,$j, 'sum(plus2)')."000,".mysql_result($results,$j, 'sum(plus3)')."000   </span>
+<span class='inlinesparkline'>".mysql_result($results,$j, 'last')."000,".mysql_result($results,$j, 'current')."000,".mysql_result($results,$j, 'plus1')."000,".mysql_result($results,$j, 'plus2')."000,".mysql_result($results,$j, 'plus3')."000   </span>
  </td></tr>
 </table>";
 
@@ -95,12 +95,12 @@ else
 	<table><tbody>
 	<tr>
 	<td>
-	Search term: ".$program."
+	Search term: ".$scheme."
 	</td>
 	</tr>
 	";
-$results2 = mysql_query("SELECT PORTFOLIO,agency,program,component,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
-FROM budget_table WHERE MATCH(program) AGAINST('$program' IN BOOLEAN MODE)  GROUP BY PROGRAM");
+$results2 = mysql_query("SELECT PORTFOLIO,agency,program,component,last,current,plus1,plus2,plus3 
+FROM budget_table WHERE MATCH(component) AGAINST('$scheme' IN BOOLEAN MODE)  ");
 
     $num_rows = mysql_num_rows($results2);
 echo "
@@ -113,7 +113,7 @@ Number of Schemes:".$num_rows."
   "
  <tr>
  <td>
-   <a href='program_results_excel.php?program=".$program."&budget_year=last' target='_blank'>
+   <a href='scheme_results_excel.php?scheme=".$scheme."&budget_year=last' target='_blank'>
    Excel Download</a>
   </td>
   </tr> 
@@ -128,15 +128,15 @@ for ($j = 0 ; $j < $rows ; ++$j)
 
             ECHO
   
-"<TABLE clas='two'>
+"<TABLE class='two'>
 <TR>
 <TD>
-<a href='program_results.php?program=%22".mysql_result($results2,$j, 'program')."%22&budget_year=last' target='_blank' title='Get Programs for this agency in new window'>".mysql_result($results2,$j, 'program')."</a>
+<a href='scheme_results.php?scheme=%22".mysql_result($results2,$j, 'component')."%22&budget_year=last' target='_blank' title='Get Programs for this agency in new window'>".mysql_result($results2,$j, 'component')."</a>
 </TD>
 </TR>
 <TR>
 <TD class='money'>
-<span class='inlinesparkline'>".mysql_result($results2,$j, 'sum(last)')."000,".mysql_result($results2,$j, 'sum(current)')."000,".mysql_result($results2,$j, 'sum(plus1)')."000,".mysql_result($results2,$j, 'sum(plus2)')."000,".mysql_result($results2,$j, 'sum(plus3)')."000   </span>
+<span class='inlinesparkline'>".mysql_result($results2,$j, 'last')."000,".mysql_result($results2,$j, 'current')."000,".mysql_result($results2,$j, 'plus1')."000,".mysql_result($results2,$j, 'plus2')."000,".mysql_result($results2,$j, 'plus3')."000   </span>
  </td></tr>
 </table>";
           
@@ -210,65 +210,7 @@ $TOS = ($actual_TOS/$total_current)*100/1;
 ///////////////////////////////////////////////////////////////////
 
    include('scripts/tax_totals.php');
-}
-   if ($budget_year =='last')
-   {
-$total_current = mysql_query("SELECT CURRENT,SUM(CURRENT) FROM budget_table2 ");
-   $num_rows = mysql_num_rows($total_current);
-($rows = mysql_num_rows($total_current));
-for ($j = 0 ; $j < $rows ; ++$j)
-$total_current = "".mysql_result($total_current,$j, 'SUM(current)')."";//assigns this value to a variable.
-/////////////////////////////////////////////////
-$query_total_last = mysql_query("SELECT last,sum(last) from budget_table 
-WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE) ");//calculates total funding for the prior budget year for agencies where search term forms part of their name
-$num_rows = mysql_num_rows($query_total_last);
-($rows = mysql_num_rows($query_total_last));
-for ($j = 0 ; $j < $rows ; ++$j)
-$query_total_last_year = "".mysql_result($query_total_last,$j, 'SUM(last)')."";//assigns this value to a variable.
-////////////////////////////////////////////////////////////////////
 
-$query_total_current = mysql_query("SELECT current,sum(current) from  budget_table
- WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE) group by  '$scheme'");//calculates total funding for current year for agencies with search term in name
-$num_rows = mysql_num_rows($query_total_current);
-($rows = mysql_num_rows($query_total_current));
-for ($j = 0 ; $j < $rows ; ++$j)
-$query_total_current_year = "".mysql_result($query_total_current,$j, 'SUM(current)')."";//assign this value to a variable
-
-//////////////////////////////////////////////////////////////////////////////////////////
-$percent = (($query_total_current_year/$total_current)*100);//$percent variable is used in tax_totals.php and the Flot pie graph
-//////////////////////////////////////////////////////////////////////////////////////////
-
-$billion_ = mysql_query("SELECT current,sum(current) from budget_table
- WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE) ");
-$num_rows = mysql_num_rows($billion_);
-($rows = mysql_num_rows($billion_));
-for ($j = 0 ; $j < $rows ; ++$j)
- $value = "".mysql_result($billion_,$j, 'SUM(current)')."";
- $billion = ($value/1000000); //divides this year's value by 1 m
-///////////////////////////////////////////////////////////////////////
-
-
-$actual_PIT = $query_total_current_year * 0.000000434;           //divides current year's value into proportion that comes from personal income tax
-$PIT = ($actual_PIT/$total_current)*100/1;         //finds percentage actual_PIT is of the whole 
-$acutal_TOS = $query_total_current_year * 0.000000566;           //divides current year value into proportion that comes from company tax etc
-$TOS = ($actual_TOS/$total_current)*100/1;
-///////////////////////////////////////////////////////////////////
-echo
-
-"<table class='top'>
-<tr><td width='100px'>Total %</td><td width='100px'>Total Cost </td><td width='100px'>Personal Tax </td>
- <td width='100px'>Company Tax </td></tr>
-<tr><td class='total'><span id='result_percentage'><b>".number_format($percent, 3)."%</b></span></td>
-<td class='total'><b>$".number_format($billion, 3)." B</b></td>
-<td class='total'><b>$".number_format($actual_PIT, 3)." B</b></td>
-<td class='total'><b>$".number_format($acutal_TOS,3)." B</b></td></tr>
-</table>";
-
-   }
-///////////////////////////////////////////////////////////////////
-	   if ($budget_year == 'current')//triggers if budget year is set to current by user form.
-	   
-	  {
 	     $result =  mysql_query("SELECT component,Program,Agency,Acronym,last,plus1,plus2,plus3,source,url 
 FROM budget_table2  WHERE MATCH(Component) AGAINST('$scheme'IN BOOLEAN MODE) ");
 
@@ -408,18 +350,61 @@ echo
 
 
   
- elseif ($budget_year = 'last')//triggers if user form is set to retrieve data from LAST BUDGET YEAR DATA
-  {
+ else 
+   {
+$total_current = mysql_query("SELECT CURRENT,SUM(CURRENT) FROM budget_table2 ");
+   $num_rows = mysql_num_rows($total_current);
+($rows = mysql_num_rows($total_current));
+for ($j = 0 ; $j < $rows ; ++$j)
+$total_current = "".mysql_result($total_current,$j, 'SUM(current)')."";//assigns this value to a variable.
+/////////////////////////////////////////////////
+$query_total_last = mysql_query("SELECT last,sum(last) from budget_table 
+WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE) ");//calculates total funding for the prior budget year for agencies where search term forms part of their name
+$num_rows = mysql_num_rows($query_total_last);
+($rows = mysql_num_rows($query_total_last));
+for ($j = 0 ; $j < $rows ; ++$j)
+$query_total_last_year = "".mysql_result($query_total_last,$j, 'SUM(last)')."";//assigns this value to a variable.
+////////////////////////////////////////////////////////////////////
 
- $result =  mysql_query("SELECT Portfolio,Program,Agency,Acronym,Component,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
-FROM budget_table  WHERE MATCH(Program) AGAINST('$scheme'IN BOOLEAN MODE) ORDER BY Agency");
+$query_total_current = mysql_query("SELECT current,sum(current) from  budget_table
+ WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE) group by  '$scheme'");//calculates total funding for current year for agencies with search term in name
+$num_rows = mysql_num_rows($query_total_current);
+($rows = mysql_num_rows($query_total_current));
+for ($j = 0 ; $j < $rows ; ++$j)
+$query_total_current_year = "".mysql_result($query_total_current,$j, 'SUM(current)')."";//assign this value to a variable
+
+//////////////////////////////////////////////////////////////////////////////////////////
+$percent = (($query_total_current_year/$total_current)*100);//$percent variable is used in tax_totals.php and the Flot pie graph
+//////////////////////////////////////////////////////////////////////////////////////////
+
+$billion_ = mysql_query("SELECT current,sum(current) from budget_table
+ WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE) ");
+$num_rows = mysql_num_rows($billion_);
+($rows = mysql_num_rows($billion_));
+for ($j = 0 ; $j < $rows ; ++$j)
+ $value = "".mysql_result($billion_,$j, 'SUM(current)')."";
+ $billion = ($value/1000000); //divides this year's value by 1 m
+///////////////////////////////////////////////////////////////////////
+
+
+$actual_PIT = $query_total_current_year * 0.000000434;           //divides current year's value into proportion that comes from personal income tax
+$PIT = ($actual_PIT/$total_current)*100/1;         //finds percentage actual_PIT is of the whole 
+$acutal_TOS = $query_total_current_year * 0.000000566;           //divides current year value into proportion that comes from company tax etc
+$TOS = ($actual_TOS/$total_current)*100/1;
+///////////////////////////////////////////////////////////////////
+   include('scripts/tax_totals.php');
+
+ 
+
+ $result =  mysql_query("SELECT Portfolio,Program,Agency,Acronym,Component,last,current,plus1,plus2,plus3 
+FROM budget_table  WHERE MATCH(component) AGAINST('$scheme'IN BOOLEAN MODE) ORDER BY Agency");
 
 //performs search using BOOLEAN paramaters based on user input. This query gives a total for the agencies matching the search term(s) with all forward funding years for the LAST BUDGET YEAR.
 
     $num_rows = mysql_num_rows($result);
       echo 
       
-"<h4>There are ".$num_rows." Schemes matching ".stripslashes($scheme)." in last budget year </h4>";
+"<h4>There are ".$num_rows." Schemes matching ".stripslashes($scheme)." in the last budget year </h4>";
     ($rows = mysql_num_rows($result));
 
 for ($j = 0 ; $j < $rows ; ++$j)
@@ -435,13 +420,13 @@ for ($j = 0 ; $j < $rows ; ++$j)
 <td><a href='scheme_results.php?scheme=%22".mysql_result($result,$j, 'Component')."%22&budget_year=last'   title='Find all Scheme results for ".mysql_result($result,$j, 'Component')." target='_blank' >".mysql_result($result,$j, 'Component')."</a>
 </td></tr>  
 <TR>
-<td>Last</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(last)')).",000  </TD></tr><tr>
-<td>Current</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(current)')).",000  </TD></tr><tr>
-<td>Next </td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus1)')).",000  </td></tr><tr>
-<td>Next +1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus2)')).",000  </td></tr><tr>
-<td>Next +2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'sum(plus3)')).",000  </td></tr><tr>
+<td>Last</td><TD class='money'>$".number_format(mysql_result($result,$j, 'last')).",000  </TD></tr><tr>
+<td>Current</td><TD class='money'>$".number_format(mysql_result($result,$j, 'current')).",000  </TD></tr><tr>
+<td>Next </td><TD class='money'>$".number_format(mysql_result($result,$j, 'plus1')).",000  </td></tr><tr>
+<td>Next +1</td><TD class='money'>$".number_format(mysql_result($result,$j, 'plus2')).",000  </td></tr><tr>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($result,$j, 'plus3')).",000  </td></tr><tr>
 <td>Trend</td><TD class='money'>
-<span class='inlinesparkline'>".mysql_result($result,$j, 'sum(last)')."000,".mysql_result($result,$j, 'sum(current)')."000,".mysql_result($result,$j, 'sum(plus1)')."000,".mysql_result($result,$j, 'sum(plus2)')."000,".mysql_result($result,$j, 'sum(plus3)')."000   </span>
+<span class='inlinesparkline'>".mysql_result($result,$j, 'last')."000,".mysql_result($result,$j, 'current')."000,".mysql_result($result,$j, 'plus1')."000,".mysql_result($result,$j, 'plus2')."000,".mysql_result($result,$j, 'plus3')."000   </span>
  </td></tr><TR>
 <TD> Source</td> 
 <td class='source'><a href=" .mysql_result($result,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($result,$j, 'Source')."</a> </TD>
@@ -452,7 +437,7 @@ for ($j = 0 ; $j < $rows ; ++$j)
   
     
  
-$results = mysql_query("SELECT portfolio,Program,Agency,Acronym,Component,last,sum(last),current,sum(current),plus1,sum(plus1),plus2,sum(plus2),plus3,sum(plus3) 
+$results = mysql_query("SELECT portfolio,Program,Agency,Acronym,Component,last,current,plus1,plus2,plus3
 FROM budget_table WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE)  order by agency");
 
 //This query outputs program level results for the agencies that match the above query. This query tells the user how many programs are administered by the agencies that match their input, the program names and totals for each with all forward years funding.
@@ -463,7 +448,7 @@ FROM budget_table WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE)  ord
 </a>";
 	   for ($j = 0 ; $j < $rows ; ++$j)
 
-
+{
  echo
    "<table class='results'>
    <tr><td class='left'>Program</td>
@@ -474,13 +459,13 @@ FROM budget_table WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE)  ord
 <td><a href='scheme_results.php?scheme=%22".mysql_result($results,$j, 'component')."%22&budget_year=last'   title='Find all Scheme results for ".mysql_result($results,$j, 'component')." target='_blank'>".mysql_result($results,$j, 'component')."</a>
 </td></tr>  
 <TR>
-<td>Last</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(last)')).",000  </TD></tr><tr>
-<td>Current</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(current)')).",000  </TD></tr><tr>
-<td>Next </td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus1)')).",000  </td></tr><tr>
-<td>Next +1</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus2)')).",000  </td></tr><tr>
-<td>Next +2</td><TD class='money'>$".number_format(mysql_result($results,$j, 'sum(plus3)')).",000  </td></tr><tr>
+<td>Last</td><TD class='money'>$".number_format(mysql_result($results,$j, 'last')).",000  </TD></tr><tr>
+<td>Current</td><TD class='money'>$".number_format(mysql_result($results,$j, 'current')).",000  </TD></tr><tr>
+<td>Next </td><TD class='money'>$".number_format(mysql_result($results,$j, 'plus1')).",000  </td></tr><tr>
+<td>Next +1</td><TD class='money'>$".number_format(mysql_result($results,$j, 'plus2')).",000  </td></tr><tr>
+<td>Next +2</td><TD class='money'>$".number_format(mysql_result($results,$j, 'plus3')).",000  </td></tr><tr>
 <td>Trend</td><TD class='money'>
-<span class='inlinesparkline'>".mysql_result($results,$j, 'sum(last)')."000,".mysql_result($results,$j, 'sum(current)')."000,".mysql_result($results,$j, 'sum(plus1)')."000,".mysql_result($results,$j, 'sum(plus2)')."000,".mysql_result($results,$j, 'sum(plus3)')."000   </span>
+<span class='inlinesparkline'>".mysql_result($results,$j, 'last')."000,".mysql_result($results,$j, 'current')."000,".mysql_result($results,$j, 'plus1')."000,".mysql_result($results,$j, 'plus2')."000,".mysql_result($results,$j, 'plus3')."000   </span>
  </td></tr><TR>
 <TD> Source</td> 
 <td class='source'><a href=" .mysql_result($results,$j, 'URL').' target="_blank" title="Opens in new window">' .mysql_result($results,$j, 'Source')."</a> </TD>
@@ -488,6 +473,7 @@ FROM budget_table WHERE MATCH(Component) AGAINST('$scheme' IN BOOLEAN MODE)  ord
 </TR>
 </table>";
 
+}
 }
 ?>
 
