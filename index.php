@@ -311,7 +311,7 @@ include('scripts/db.php');
    "
   <table class='results'><tbody>
 <tr>
-<td><b>Current Budget Year Data</b></td><td>Total</td></tr>";
+<td><b>2014-15 Budget Data</b></td><td>Total</td></tr>";
   for ($j = 0 ; $j < $rows ; ++$j)
   {
    echo
@@ -335,7 +335,7 @@ include('scripts/db.php');
    "
   <table class='results'><tbody>
 <tr>
-<td><b>Last Budget Year Results</b></td><td>Total</td></tr>";
+<td><b>2013-14 Budget Data</b></td><td>Total</td></tr>";
   for ($j = 0 ; $j < $rows ; ++$j)
   {
    echo
